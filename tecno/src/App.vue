@@ -202,7 +202,7 @@ export default {
           response => {
             if (response.body.signUp)
               this.$router.push({
-                name: "HelloWorld",s
+                name: "HelloWorld",
                 params: { user: datos.username }
               });
             else
