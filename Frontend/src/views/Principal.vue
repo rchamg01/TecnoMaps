@@ -93,7 +93,7 @@ export default {
         {
           link: "/addLayer",
           title: "Añadir capa",
-          icon: "dashboard"
+          icon: "library_add"
         }
       ],
       mini: true,
