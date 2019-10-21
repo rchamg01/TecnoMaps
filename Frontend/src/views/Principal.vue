@@ -6,9 +6,9 @@
       <v-avatar size="36px">
         <v-icon>fas fa-address-card</v-icon>
       </v-avatar>
-      <v-btn flat v-on:click="$router.push({
-              name: 'Login'})">Log Out</v-btn>
+      <v-btn flat v-on:click="logout">Log Out</v-btn>
     </v-toolbar>
+
     <v-navigation-drawer
       v-model="drawer"
       :mini-variant.sync="mini"
@@ -27,7 +27,7 @@
             </v-list-tile-avatar>
 
             <v-list-tile-content>
-              <v-list-tile-title>{{nombre}}</v-list-tile-title>
+              <v-list-tile-title>{{username}}</v-list-tile-title>
             </v-list-tile-content>
 
             <v-list-tile-action>
@@ -59,9 +59,10 @@
     </v-navigation-drawer>
 
     <v-content>
-      <router-view :nombre="nombre"></router-view>
+      <router-view></router-view>
     </v-content>
-    <v-footer dark height="90" app="app">
+
+    <v-footer dark height="50" app="app">
       <v-card flat tile class="blue-grey darken-3 white--text text-xs-center flex">
         <v-card-text>2019 Tecnomaps.</v-card-text>
       </v-card>
@@ -101,8 +102,22 @@ export default {
     };
   },
 
-  created() {
-    this.nombre = this.$route.params.user;
+  computed: {
+    username: function() {
+      return this.$store.getters.getUser.username;
+    }
+  },
+  mounted() {
+    if (this.$store.getters.getUser == "") {
+      this.$router.push({ name: "Login" });
+    }
+  },
+  methods: {
+    logout: function() {
+      this.$store.dispatch("logout").then(() => {
+        this.$router.push("/");
+      });
+    }
   }
 };
 </script>

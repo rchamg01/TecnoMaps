@@ -11,17 +11,57 @@
         :rotation.sync="rotation"
         :max-zoom="maxZoom"
       ></vl-view>
+      <!-- <v-toolbar dense floating class="pa-4">
+          <v-text-field hide-details prepend-icon="search" single-line></v-text-field>
+
+          <v-btn icon>
+            <v-icon>my_location</v-icon>
+          </v-btn>
+
+          <v-btn icon>
+            <v-icon>mdi-dots-vertical</v-icon>
+          </v-btn>
+      </v-toolbar>-->
+
       <!-- En Bing Maps no hay más zoom de 19 -->
       <vl-layer-tile>
         <vl-source-bingmaps :api-key="apiKey" :imagery-set="imagerySet"></vl-source-bingmaps>
       </vl-layer-tile>
+      <v-navigation-drawer
+        v-model="drawer"
+        :mini-variant.sync="mini"
+        absolute
+        right
+        fixed
+        class="blue-grey darken-1"
+      >
+        <v-toolbar flat class="transparent">
+          <v-list class="pa-0">
+            <v-list-tile avatar>
+              <v-list-tile-avatar>
+                <v-btn icon @click.stop="mini = !mini">
+                  <v-icon>menu</v-icon>
+                </v-btn>
+              </v-list-tile-avatar>
+
+              <v-list-tile-content>
+                <v-list-tile-title>Layers</v-list-tile-title>
+              </v-list-tile-content>
+
+              <v-list-tile-action>
+                <v-btn icon @click.stop="mini = !mini">
+                  <v-icon>chevron_left</v-icon>
+                </v-btn>
+              </v-list-tile-action>
+            </v-list-tile>
+          </v-list>
+        </v-toolbar>
+      </v-navigation-drawer>
     </vl-map>
   </v-app>
 </template>
 
 <script>
-import OverviewMap from "ol/control/OverviewMap";
-
 export default {
   name: "Map",
   data() {
@@ -33,26 +73,19 @@ export default {
       apiKey:
         "AljABXVYxUw9xFjAIFZIvjdgHaxgFConuMDkjLRsPLa1N4vMF2SMRN3BBJMGKdO6",
       imagerySet: "AerialWithLabels",
-      componentKey: 0
+      componentKey: 0,
+      drawer: true,
+      mini: true
     };
   },
-  methods: {
-    onMapMounted() {
-      // now ol.Map instance is ready and we can work with it directly
-      this.$refs.map.$map.getControls().extend([
-        new ScaleLine(),
-        new FullScreen(),
-        new OverviewMap({
-          collapsed: false,
-          collapsible: true
-        }),
-        new ZoomSlider()
-      ]);
-    }
-  }
+  methods: {}
 };
 </script>
 
 <style scoped lang="stylus">
 @import '~ol/ol.css';
+
+.map-panel {
+  padding: 0;
+}
 </style> 

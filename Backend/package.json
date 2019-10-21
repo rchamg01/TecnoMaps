@@ -9,11 +9,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "cors-anywhere": "^0.4.1",
     "express": "^4.16.4",
+    "jsonwebtoken": "^8.5.1",
     "mysql2": "^1.6.5",
-    "sequelize": "^5.2.12"
+    "sequelize": "^5.19.8",
+    "ssh-tunnel": "^2.3.23",
+    "tunnel-ssh": "^4.1.4"
   }
 }

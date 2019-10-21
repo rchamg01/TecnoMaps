@@ -9,6 +9,13 @@ import "vue-sidebar-menu/dist/vue-sidebar-menu.css";
 import store from "./store";
 import VueLayers from "vuelayers";
 import "vuelayers/lib/style.css";
+import Axios from "axios";
+
+Vue.prototype.$http = Axios;
+const token = localStorage.getItem("token");
+if (token) {
+  Vue.prototype.$http.defaults.headers.common["Authorization"] = token;
+}
 
 Vue.use(VueLayers);
 Vue.use(VueResource);

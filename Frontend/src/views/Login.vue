@@ -2,35 +2,11 @@
   <v-app id="inspire">
     <v-content>
       <v-parallax height="1000" src="https://i.imgur.com/M21XVBk.jpg">
-        <v-alert :value="alert1" dense outlined type="error">
+        <v-alert :value="alert" dense outlined type="error">
           <v-flex align="center" name="error1">
-            <v-flex class="grow">Rellene todos los campos</v-flex>
+            <v-flex class="grow">{{alertContent}}</v-flex>
             <v-flex class="shrink">
-              <v-btn color="info" outlined @click="alert1 = !alert1" left>Okey</v-btn>
-            </v-flex>
-          </v-flex>
-        </v-alert>
-        <v-alert :value="alert2" dense outlined type="error">
-          <v-flex align="center" name="error2">
-            <v-flex class="grow">Nombre o contraseña incorrectos</v-flex>
-            <v-flex class="shrink">
-              <v-btn color="info" outlined @click="alert2 = !alert2" left>Okey</v-btn>
-            </v-flex>
-          </v-flex>
-        </v-alert>
-        <v-alert :value="alert3" dense outlined type="error">
-          <v-flex align="center" name="error3">
-            <v-flex class="grow">Ha habido un error en el envío</v-flex>
-            <v-flex class="shrink">
-              <v-btn color="info" outlined @click="alert3 = !alert3" left>Okey</v-btn>
-            </v-flex>
-          </v-flex>
-        </v-alert>
-        <v-alert :value="alert4" dense outlined type="error">
-          <v-flex align="center" name="error4">
-            <v-flex class="grow">Ha habido un error (el usuario podría estar añadido)</v-flex>
-            <v-flex class="shrink">
-              <v-btn color="info" outlined @click="alert4 = !alert4" left>Okey</v-btn>
+              <v-btn color="info" outlined @click="alert = !alert" left>Okey</v-btn>
             </v-flex>
           </v-flex>
         </v-alert>
@@ -73,7 +49,7 @@
                       depressed
                       class="white--text"
                       color="#907A55"
-                      v-on:click="sendLogin"
+                      v-on:click="login"
                     >Login</v-btn>
                   </v-card-actions>
                 </v-card>
@@ -114,7 +90,7 @@
                       depressed
                       class="white--text"
                       color="#907A55"
-                      @click="sendSignUp"
+                      @click="register"
                     >Sign up</v-btn>
                   </v-card-actions>
                 </v-card>
@@ -156,46 +132,39 @@ export default {
         "deep-purple accent-4"
       ],
       slides: ["First", "Second", "Third", "Fourth", "Fifth"],
-      alert1: false,
-      alert2: false,
-      alert3: false,
-      alert4: false
+      alert: false,
+      alertContent: ""
     };
   },
+
   methods: {
-    sendLogin: function() {
-      if (this.address.includes("localhost") || this.address == "http://.:3000")
-        this.address = "http://localhost:3000";
+    login: function() {
       if (
         this.loginName == null ||
         this.loginName == "" ||
         this.loginPass == null ||
         this.loginPass == ""
       ) {
-        this.alert1 = true;
+        this.alertContent = "Rellene todos los campos";
+        this.alert = true;
       } else {
-        var datos = {
-          username: this.loginName,
-          password: this.loginPass
-        };
-        this.$http.post(this.address + "/login/", datos).then(
-          response => {
-            if (response.body.login)
-              this.$router.push({
-                name: "Map",
-                params: { user: datos.username }
-              });
-            else this.alert2 = true;
-          },
-          response => {
-            this.alert3 = true;
-          }
-        );
+        let username = this.loginName;
+        let password = this.loginPass;
+        this.$store
+          .dispatch("login", { username, password })
+          .then(() => this.$router.push({ name: "Map" }))
+          .catch(err => {
+            if ((err.status = 404)) {
+              this.alertContent = "No se encontró el usuario";
+            } else if ((err.status = 500)) {
+              this.alertContent = "Hubo un problema en el envío";
+            }
+            this.alert = true;
+          });
       }
     },
-    sendSignUp: function() {
-      if (this.address.includes("localhost"))
-        this.address = "http://localhost:3000";
+
+    register: function() {
       if (
         this.signName == null ||
         this.signName == "" ||
@@ -204,26 +173,25 @@ export default {
         this.email == null ||
         this.email == ""
       ) {
-        this.alert1 = true;
+        this.alertContent = "Rellene todos los campos";
+        this.alert = true;
       } else {
-        var datos = {
+        let data = {
           username: this.signName,
-          password: this.signPass,
-          email: this.email
+          email: this.email,
+          password: this.signPass
         };
-        this.$http.post(this.address + "/createUser", datos).then(
-          response => {
-            if (response.body.signUp)
-              this.$router.push({
-                path: "/principal/",
-                params: { user: datos.username }
-              });
-            else this.alert4 = true;
-          },
-          response => {
-            this.alert3 = true;
-          }
-        );
+        this.$store
+          .dispatch("register", data)
+          .then(() => this.$router.push({ name: "Map" }))
+          .catch(err => {
+            if ((err.status = 404)) {
+              this.alertContent = "Ese nombre de usuario ya está registrado";
+            } else if ((err.status = 500)) {
+              this.alertContent = "Hubo un problema en el envío";
+            }
+            this.alert = true;
+          });
       }
     }
   }
