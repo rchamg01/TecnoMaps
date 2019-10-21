@@ -9,14 +9,16 @@ const fs = require("fs");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("./config");
+const tunnel = require("tunnel-ssh");
 const httpPort = 80;
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const sequelize = new Sequelize("tecnomaps", "root", "1236", {
+const sequelize = new Sequelize("tecnomaps", "practicas", "Qwerty.1234", {
   host: "localhost",
+  port: "3305",
   dialect: "mysql",
   define: {
     timestamps: false
