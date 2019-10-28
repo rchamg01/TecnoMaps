@@ -5,28 +5,21 @@
       :load-tiles-while-interacting="true"
       data-projection="EPSG:4326"
     >
+      <!-- En Bing Maps no hay más zoom de 19 -->
+      <vl-layer-tile>
+        <vl-source-bingmaps :api-key="apiKey" :imagery-set="imagerySet"></vl-source-bingmaps>
+      </vl-layer-tile>
       <vl-view
         :zoom.sync="zoom"
         :center.sync="center"
         :rotation.sync="rotation"
         :max-zoom="maxZoom"
       ></vl-view>
-      <!-- <v-toolbar dense floating class="pa-4">
-          <v-text-field hide-details prepend-icon="search" single-line></v-text-field>
 
-          <v-btn icon>
-            <v-icon>my_location</v-icon>
-          </v-btn>
-
-          <v-btn icon>
-            <v-icon>mdi-dots-vertical</v-icon>
-          </v-btn>
-      </v-toolbar>-->
-
-      <!-- En Bing Maps no hay más zoom de 19 -->
-      <vl-layer-tile>
-        <vl-source-bingmaps :api-key="apiKey" :imagery-set="imagerySet"></vl-source-bingmaps>
+      <vl-layer-tile v-for="(layer) in layers" v-bind:key="layer.params.LAYERS">
+        <vl-source-wms :url="layer.url" :params="layer.params" :layers="layer.params.LAYERS"></vl-source-wms>
       </vl-layer-tile>
+
       <v-navigation-drawer
         v-model="drawer"
         :mini-variant.sync="mini"
@@ -75,9 +68,34 @@ export default {
       imagerySet: "AerialWithLabels",
       componentKey: 0,
       drawer: true,
-      mini: true
+      mini: true,
+      layers: [
+        {
+          //Lluvias
+          url: "https://mesonet.agron.iastate.edu/cgi-bin/wms/us/mrms_nn.cgi?",
+          params: { LAYERS: "mrms_p72h" }
+        },
+        {
+          //Estados
+          url: "https://ahocevar.com/geoserver/wms",
+          params: { LAYERS: "topp:states", TILED: true }
+        },
+        {
+          //Austria(?)
+          url: "https://wms.geo.admin.ch/",
+          params: { LAYERS: "ch.babs.kulturgueter", TILED: true }
+        } /*,
+       {
+          url: "http://www.ign.es/wms-inspire/pnoa-ma?SERVICE=WMS",
+          params: { LAYERS: "OI.OrthoimageCoverage", TILED: true },
+          serverType: "geoserver",
+          transition: 0,
+          name: "OI.OrthoimageCoverage"
+        }*/
+      ]
     };
   },
+
   methods: {}
 };
 </script>
