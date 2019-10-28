@@ -13,8 +13,10 @@ export default new Vuex.Store({
 
   state: {
     status: "",
+    layersStatus: "",
     token: localStorage.getItem("token") || "",
-    user: ""
+    user: "",
+    layers: []
   },
   mutations: {
     update_user(state, user) {
@@ -33,6 +35,18 @@ export default new Vuex.Store({
     logout(state) {
       state.status = "";
       state.token = "";
+    },
+    update_layers(state, layers) {
+      state.layers = layers;
+    },
+    layers_request(state) {
+      state.layersStatus = "loading";
+    },
+    layers_success(state) {
+      state.layersStatus = "success";
+    },
+    layers_error(state) {
+      state.layersStatus = "error";
     }
   },
   actions: {
@@ -97,6 +111,26 @@ export default new Vuex.Store({
         localStorage.removeItem("token");
         delete axios.defaults.headers.common["Authorization"];
         resolve();
+      });
+    },
+    registerLayer({ commit }, layer) {
+      return new Promise((resolve, reject) => {
+        commit("layers_request");
+        axios({
+          url: "http://localhost:3000/registerLayer",
+          data: layer,
+          method: "POST"
+        })
+          .then(resp => {
+            const layers = resp.data.layers;
+            commit("layers_success");
+            commit("update_layers", layers);
+            resolve(resp);
+          })
+          .catch(err => {
+            commit("layers_ error", err);
+            reject(err);
+          });
       });
     }
   }

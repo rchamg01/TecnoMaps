@@ -4,9 +4,13 @@
       <v-toolbar flat tile color="rgb(255,255,255)">
         <v-toolbar-title>LAYER</v-toolbar-title>
       </v-toolbar>
-      <v-snackbar v-model="snackbar" absolute top right color="success">
+      <v-snackbar v-model="snackbarSuccess" absolute top right color="success">
         <span>Registration successful!</span>
         <v-icon dark>mdi-checkbox-marked-circle</v-icon>
+      </v-snackbar>
+      <v-snackbar v-model="snackbarError" absolute top right color="error">
+        <span>An error ocurred</span>
+        <v-icon dark>mdi-close</v-icon>
       </v-snackbar>
 
       <v-form ref="form" @submit.prevent="submit">
@@ -14,10 +18,10 @@
           <v-layout row justify-space-between>
             <v-flex xs4>
               <v-text-field
-                v-model="form.layerName"
+                v-model="form.name"
                 :rules="rules.name"
                 label="Name"
-                placeholder="Layer name"
+                placeholder="Name"
                 hint="Required field"
                 clearable
                 required
@@ -26,9 +30,13 @@
 
             <v-flex xs4>
               <v-text-field
-                label="Description"
-                placeholder="Layer description"
-                hint="Optional field"
+                v-model="form.layerName"
+                :rules="rules.layerName"
+                label="Layer Name"
+                placeholder="Layer Name"
+                hint="Required field"
+                clearable
+                required
               ></v-text-field>
             </v-flex>
 
@@ -37,7 +45,7 @@
                 v-model="form.layerSource"
                 :rules="rules.source"
                 label="Source"
-                placeholder="Layer source"
+                placeholder="Layer URL"
                 hint="Required field"
               ></v-text-field>
             </v-flex>
@@ -60,9 +68,10 @@
 
             <v-flex xs4>
               <v-text-field
-                label="Layer visibility maximum scale"
-                prepend-inner-icon="zoom_in"
-                placeholder="1:"
+                v-model="form.desc"
+                label="Description"
+                placeholder="Layer description"
+                hint="Optional field"
               ></v-text-field>
             </v-flex>
 
@@ -77,7 +86,7 @@
           </v-layout>
           <v-layout row justify-space-between>
             <v-flex xs4>
-              <v-checkbox label="Activated" color="green"></v-checkbox>
+              <v-checkbox label="Visible" color="green" v-model="form.visible"></v-checkbox>
             </v-flex>
             <v-flex xs4>
               <v-checkbox label="Proxy" color="green"></v-checkbox>
@@ -97,6 +106,7 @@
             type="submit"
             depressed
             outline
+            @click="register"
           >Register</v-btn>
         </v-card-actions>
       </v-form>
@@ -107,24 +117,30 @@
 export default {
   data() {
     const defaultForm = Object.freeze({
+      name: "",
       layerName: "",
       layerSource: "",
-      opacity: 50
+      opacity: 50,
+      desc: "",
+      visible: true
     });
+
     return {
       form: Object.assign({}, defaultForm),
       rules: {
         name: [val => (val || "").length > 0 || "This field is required"],
-        source: [val => (val || "").length > 0 || "This field is required"]
+        source: [val => (val || "").length > 0 || "This field is required"],
+        layerName: [val => (val || "").length > 0 || "This field is required"]
       },
       conditions: false,
-      snackbar: false,
+      snackbarError: false,
+      snackbarSuccess: false,
       defaultForm
     };
   },
   computed: {
     formIsValid() {
-      return this.form.layerName && this.form.layerSource;
+      return this.form.name && this.form.layerSource && this.form.layerName;
     }
   },
   methods: {
@@ -133,8 +149,26 @@ export default {
       this.$refs.form.reset();
     },
     submit() {
-      this.snackbar = true;
       this.resetForm();
+    },
+    register() {
+      this.snackbarError = true;
+      /*if (this.form.opacity == null) this.form.opacity = 50;
+      var data = {
+        name: this.form.name,
+        layerName: this.form.layerName,
+        url: this.form.layerSource,
+        opacity: this.form.opacity,
+        desc: this.form.desc,
+        visible: this.form.visible,
+        idUser: this.$store.getters.getUser.id
+      };
+      this.$store
+        .dispatch("registerLayer", data)
+        .then(() => (this.snackbarSuccess = true))
+        .catch(err => {
+          this.snackbarError = true;
+        });*/
     }
   }
 };

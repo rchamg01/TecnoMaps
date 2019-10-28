@@ -48,7 +48,7 @@
 
               <v-list-tile-action>
                 <v-btn icon @click.stop="mini = !mini">
-                  <v-icon>chevron_left</v-icon>
+                  <v-icon>chevron_right</v-icon>
                 </v-btn>
               </v-list-tile-action>
             </v-list-tile>
