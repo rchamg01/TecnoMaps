@@ -46,6 +46,20 @@ User.init(
   { sequelize, modelName: "user" }
 );
 
+class Layer extends Sequelize.Model {}
+Layer.init(
+  {
+    name: Sequelize.STRING,
+    description: Sequelize.STRING,
+    layerName: Sequelize.STRING,
+    url: Sequelize.STRING,
+    opacity: Sequelize.INTEGER,
+    visible: Sequelize.INTEGER,
+    idUser: Sequelize.INTEGER
+  },
+  { sequelize, modelName: "layer" }
+);
+
 sequelize.sync();
 
 http
@@ -162,6 +176,29 @@ app.post("/logout", function(req, res) {
     {
       type: sequelize.QueryTypes.UPDATE
     }
+  );
+});
+
+app.post("/registerLayer", function(req, res) {
+  sequelize.sync().then(() =>
+    Layer.create({
+      name: req.body.name,
+      description: req.body.desc,
+      layerName: req.body.layerName,
+      url: req.body.url,
+      opacity: req.body.opacity,
+      visible: req.body.visible,
+      idUser: req.body.idUser
+    })
+      .then(() => {
+        res.status(200).send(true);
+      })
+      .catch(err => {
+        console.log(err);
+        return res
+          .status(500)
+          .send("There was a problem registering the layer");
+      })
   );
 });
 
