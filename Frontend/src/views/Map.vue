@@ -16,7 +16,7 @@
         :max-zoom="maxZoom"
       ></vl-view>
 
-      <vl-layer-tile v-for="(layer) in layers" v-bind:key="layer.params.LAYERS">
+      <vl-layer-tile v-for="(layer) in layers" v-bind:key="layer.id">
         <vl-source-wms
           :url="layer.url"
           :params="layer.params"
@@ -58,9 +58,7 @@
           <v-divider></v-divider>
           <v-list-tile v-for="layer in layers" :key="layer.name">
             <v-list-tile-content>
-              <v-switch v-model="layer.visible"></v-switch>
-
-              <v-list-tile-title>{{ layer.name }}</v-list-tile-title>
+              <v-switch v-model="layer.visible" :label="layer.name" color="orange" dark></v-switch>
             </v-list-tile-content>
           </v-list-tile>
         </v-list>
@@ -86,17 +84,17 @@ export default {
       mini: true,
       layers: [
         {
-          //Lluvias
-          url: "https://mesonet.agron.iastate.edu/cgi-bin/wms/us/mrms_nn.cgi?",
-          params: { LAYERS: "mrms_p72h" },
-          name: "Lluvias",
-          visible: true
-        },
-        {
           //Estados
           url: "https://ahocevar.com/geoserver/wms",
           params: { LAYERS: "topp:states", TILED: true },
           name: "Estados",
+          visible: true
+        },
+        {
+          //Lluvias
+          url: "https://mesonet.agron.iastate.edu/cgi-bin/wms/us/mrms_nn.cgi?",
+          params: { LAYERS: "mrms_p72h" },
+          name: "Lluvias",
           visible: true
         },
         {

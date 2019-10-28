@@ -114,11 +114,12 @@ export default {
   },
   methods: {
     logout: function() {
-      this.$store.dispatch("logout").then(() => {
+      this.$store.dispatch("logout", this.$store.getters.getUser).then(() => {
         this.$router.push("/");
       });
     }
   }
 };
 </script>
+
 

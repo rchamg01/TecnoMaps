@@ -18,7 +18,7 @@
                 :rules="rules.name"
                 label="Name"
                 placeholder="Layer name"
-                hint="required field"
+                hint="Required field"
                 clearable
                 required
               ></v-text-field>
@@ -38,7 +38,7 @@
                 :rules="rules.source"
                 label="Source"
                 placeholder="Layer source"
-                hint="required field"
+                hint="Required field"
               ></v-text-field>
             </v-flex>
           </v-layout>
@@ -111,26 +111,22 @@ export default {
       layerSource: "",
       opacity: 50
     });
-
     return {
       form: Object.assign({}, defaultForm),
       rules: {
         name: [val => (val || "").length > 0 || "This field is required"],
         source: [val => (val || "").length > 0 || "This field is required"]
       },
-
       conditions: false,
       snackbar: false,
       defaultForm
     };
   },
-
   computed: {
     formIsValid() {
       return this.form.layerName && this.form.layerSource;
     }
   },
-
   methods: {
     resetForm() {
       this.form = Object.assign({}, this.defaultForm);
