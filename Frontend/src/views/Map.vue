@@ -17,7 +17,12 @@
       ></vl-view>
 
       <vl-layer-tile v-for="(layer) in layers" v-bind:key="layer.params.LAYERS">
-        <vl-source-wms :url="layer.url" :params="layer.params" :layers="layer.params.LAYERS"></vl-source-wms>
+        <vl-source-wms
+          :url="layer.url"
+          :params="layer.params"
+          :layers="layer.params.LAYERS"
+          v-if="layer.visible"
+        ></vl-source-wms>
       </vl-layer-tile>
 
       <v-navigation-drawer
@@ -49,6 +54,16 @@
             </v-list-tile>
           </v-list>
         </v-toolbar>
+        <v-list>
+          <v-divider></v-divider>
+          <v-list-tile v-for="layer in layers" :key="layer.name">
+            <v-list-tile-content>
+              <v-switch v-model="layer.visible"></v-switch>
+
+              <v-list-tile-title>{{ layer.name }}</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list>
       </v-navigation-drawer>
     </vl-map>
   </v-app>
@@ -73,17 +88,23 @@ export default {
         {
           //Lluvias
           url: "https://mesonet.agron.iastate.edu/cgi-bin/wms/us/mrms_nn.cgi?",
-          params: { LAYERS: "mrms_p72h" }
+          params: { LAYERS: "mrms_p72h" },
+          name: "Lluvias",
+          visible: true
         },
         {
           //Estados
           url: "https://ahocevar.com/geoserver/wms",
-          params: { LAYERS: "topp:states", TILED: true }
+          params: { LAYERS: "topp:states", TILED: true },
+          name: "Estados",
+          visible: true
         },
         {
           //Austria(?)
           url: "https://wms.geo.admin.ch/",
-          params: { LAYERS: "ch.babs.kulturgueter", TILED: true }
+          params: { LAYERS: "ch.babs.kulturgueter", TILED: true },
+          name: "Austria",
+          visible: true
         } /*,
        {
           url: "http://www.ign.es/wms-inspire/pnoa-ma?SERVICE=WMS",
@@ -95,7 +116,6 @@ export default {
       ]
     };
   },
-
   methods: {}
 };
 </script>
