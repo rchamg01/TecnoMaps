@@ -134,6 +134,12 @@ app.post("/login", function(req, res) {
     )
     .then(users => {
       if (users.length != 0) {
+        sequelize.query(
+          "UPDATE users SET active = 1 WHERE (username = '" +
+            users[0].username +
+            "')",
+          { type: sequelize.QueryTypes.UPDATE }
+        );
         let token = jwt.sign({ id: users[0].id }, config.secret, {
           expiresIn: 86400 // expires in 24 hours
         });
@@ -146,6 +152,17 @@ app.post("/login", function(req, res) {
       console.log(err);
       return res.status(500).send("There was a problem on the server.");
     });
+});
+
+app.post("/logout", function(req, res) {
+  sequelize.query(
+    "UPDATE users SET active = 0 WHERE (username = '" +
+      req.body.username +
+      "')",
+    {
+      type: sequelize.QueryTypes.UPDATE
+    }
+  );
 });
 
 app.listen(port, function() {
