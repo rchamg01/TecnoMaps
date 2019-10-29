@@ -155,7 +155,8 @@ export default {
           .then(() => this.$router.push({ name: "Map" }))
           .catch(err => {
             if ((err.status = 404)) {
-              this.alertContent = "No se encontró el usuario";
+              this.alertContent =
+                "No se encontró el usuario o hubo un problema";
             } else if ((err.status = 500)) {
               this.alertContent = "Hubo un problema en el envío";
             }

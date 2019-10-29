@@ -153,7 +153,7 @@ export default {
     },
     register() {
       this.snackbarError = true;
-      /*if (this.form.opacity == null) this.form.opacity = 50;
+      if (this.form.opacity == null) this.form.opacity = 50;
       var data = {
         name: this.form.name,
         layerName: this.form.layerName,
@@ -168,7 +168,7 @@ export default {
         .then(() => (this.snackbarSuccess = true))
         .catch(err => {
           this.snackbarError = true;
-        });*/
+        });
     }
   }
 };

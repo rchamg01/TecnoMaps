@@ -16,17 +16,17 @@
         :max-zoom="maxZoom"
       ></vl-view>
 
-      <vl-layer-tile v-for="(layer) in layers" v-bind:key="layer.id">
+      <vl-layer-tile v-for="layer in layers" v-bind:key="layer.layerName">
         <vl-source-wms
+          :opacity="layer.opacity"
           :url="layer.url"
           :params="layer.params"
-          :layers="layer.params.LAYERS"
+          :layers="layer.layerName"
           v-if="layer.visible"
         ></vl-source-wms>
       </vl-layer-tile>
 
       <v-navigation-drawer
-        v-model="drawer"
         :mini-variant.sync="mini"
         absolute
         right
@@ -35,7 +35,7 @@
       >
         <v-toolbar flat class="transparent">
           <v-list class="pa-0">
-            <v-list-tile avatar>
+            <v-list-tile>
               <v-list-tile-avatar>
                 <v-btn icon @click.stop="mini = !mini">
                   <v-icon>menu</v-icon>
@@ -57,8 +57,12 @@
         <v-list>
           <v-divider></v-divider>
           <v-list-tile v-for="layer in layers" :key="layer.name">
+            <v-list-tile-avatar>
+              <v-switch v-model="layer.visible" :disabled="mini" color="orange" dark></v-switch>
+            </v-list-tile-avatar>
             <v-list-tile-content>
-              <v-switch v-model="layer.visible" :label="layer.name" color="orange" dark></v-switch>
+              <v-list-tile-title>{{layer.name}}</v-list-tile-title>
+              <v-list-tile-sub-title>{{layer.description}}</v-list-tile-sub-title>
             </v-list-tile-content>
           </v-list-tile>
         </v-list>
@@ -80,10 +84,9 @@ export default {
         "AljABXVYxUw9xFjAIFZIvjdgHaxgFConuMDkjLRsPLa1N4vMF2SMRN3BBJMGKdO6",
       imagerySet: "AerialWithLabels",
       componentKey: 0,
-      drawer: true,
       mini: true,
       layers: [
-        {
+        /*{
           //Estados
           url: "https://ahocevar.com/geoserver/wms",
           params: { LAYERS: "topp:states", TILED: true },
@@ -111,8 +114,18 @@ export default {
           transition: 0,
           name: "OI.OrthoimageCoverage"
         }*/
-      ]
+      ],
+      disabled: true
     };
+  },
+  mounted() {
+    var data = this.$store.getters.getUser;
+    this.$store
+      .dispatch("getLayers", data)
+      .then(() => {
+        this.layers = this.$store.getters.getLayers;
+      })
+      .catch(err => {});
   },
   methods: {}
 };

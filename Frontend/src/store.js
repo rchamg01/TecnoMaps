@@ -7,6 +7,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   getters: {
     getUser: state => state.user,
+    getLayers: state => state.layers,
     isLoggedIn: state => !!state.token,
     authStatus: state => state.status
   },
@@ -113,6 +114,26 @@ export default new Vuex.Store({
         resolve();
       });
     },
+    getLayers({ commit }, user) {
+      return new Promise((resolve, reject) => {
+        commit("layers_request");
+        axios({
+          url: "http://localhost:3000/getLayers",
+          data: user,
+          method: "POST"
+        })
+          .then(resp => {
+            const layers = resp.data.layers;
+            commit("layers_success");
+            commit("update_layers", layers);
+            resolve(resp);
+          })
+          .catch(err => {
+            commit("layers_error");
+            reject(err);
+          });
+      });
+    },
     registerLayer({ commit }, layer) {
       return new Promise((resolve, reject) => {
         commit("layers_request");
@@ -122,9 +143,7 @@ export default new Vuex.Store({
           method: "POST"
         })
           .then(resp => {
-            const layers = resp.data.layers;
             commit("layers_success");
-            commit("update_layers", layers);
             resolve(resp);
           })
           .catch(err => {
