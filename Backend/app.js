@@ -179,6 +179,27 @@ app.post("/logout", function(req, res) {
   );
 });
 
+app.post("/getLayers", function(req, res) {
+  var idUser = req.body.id;
+
+  if (idUser != undefined) {
+    sequelize
+      .query(
+        "SELECT * FROM layers WHERE (idUser = " + idUser + ") ORDER BY id DESC",
+        {
+          type: sequelize.QueryTypes.SELECT
+        }
+      )
+      .then(layers => {
+        res.status(200).send({ layers: layers });
+      })
+      .catch(err => {
+        console.log(err);
+        return res.status(500).send("There was a problem on the server.");
+      });
+  }
+});
+
 app.post("/registerLayer", function(req, res) {
   sequelize.sync().then(() =>
     Layer.create({
