@@ -10,7 +10,8 @@
           <v-card flat>
             <v-card-title>
               <v-icon left>map</v-icon>
-              <v-list-tile-title>{{layer.name}}</v-list-tile-title>
+
+              {{layer.name}}
             </v-card-title>
           </v-card>
         </template>
