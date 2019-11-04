@@ -2,6 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import Login from "@/views/Login";
 import AddLayer from "@/views/AddLayer";
+import EditLayer from "@/views/EditLayer";
 import store from "./store.js";
 const Principal = () => import("@/views/Principal");
 const Map = () => import("./views/Map.vue");
@@ -29,6 +30,11 @@ let router = new Router({
           path: "/addlayer",
           name: "AddLayer",
           component: AddLayer
+        },
+        {
+          path: "/editlayer",
+          name: "EditLayer",
+          component: EditLayer
         }
       ]
     }

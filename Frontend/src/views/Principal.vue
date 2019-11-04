@@ -87,6 +87,11 @@ export default {
           link: "/addLayer",
           title: "Añadir capa",
           icon: "library_add"
+        },
+        {
+          link: "/editLayer",
+          title: "Gestor de capas",
+          icon: "create"
         }
       ],
       mini: true,

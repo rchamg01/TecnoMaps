@@ -89,10 +89,10 @@
               <v-checkbox label="Visible" color="green" v-model="form.visible"></v-checkbox>
             </v-flex>
             <v-flex xs4>
-              <v-checkbox label="Proxy" color="green"></v-checkbox>
+              <v-checkbox label="Proxy" disabled color="green"></v-checkbox>
             </v-flex>
             <v-flex xs4>
-              <v-checkbox label="Secured" color="green"></v-checkbox>
+              <v-checkbox label="Secured" disabled color="green"></v-checkbox>
             </v-flex>
           </v-layout>
         </v-container>
@@ -152,7 +152,6 @@ export default {
       this.resetForm();
     },
     register() {
-      this.snackbarError = true;
       if (this.form.opacity == null) this.form.opacity = 50;
       var data = {
         name: this.form.name,
