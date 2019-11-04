@@ -10,7 +10,6 @@
           <v-card flat>
             <v-card-title>
               <v-icon left>map</v-icon>
-
               {{layer.name}}
             </v-card-title>
           </v-card>
@@ -152,7 +151,13 @@ export default {
     }
   },
   mounted() {
-    this.layers = this.$store.getters.getLayers;
+    var data = this.$store.getters.getUser;
+    this.$store
+      .dispatch("getLayers", data)
+      .then(() => {
+        this.layers = this.$store.getters.getLayers;
+      })
+      .catch(err => {});
   },
   methods: {
     resetForm() {
