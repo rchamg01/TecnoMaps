@@ -169,14 +169,18 @@ app.post("/login", function(req, res) {
 });
 
 app.post("/logout", function(req, res) {
-  sequelize.query(
-    "UPDATE users SET active = 0 WHERE (username = '" +
-      req.body.username +
-      "')",
-    {
-      type: sequelize.QueryTypes.UPDATE
-    }
-  );
+  sequelize
+    .query(
+      "UPDATE users SET active = 0 WHERE (username = '" +
+        req.body.username +
+        "')",
+      {
+        type: sequelize.QueryTypes.UPDATE
+      }
+    )
+    .then(layers => {
+      res.status(200).send(true);
+    });
 });
 
 app.post("/getLayers", function(req, res) {
