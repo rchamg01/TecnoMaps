@@ -189,7 +189,7 @@ app.post("/getLayers", function(req, res) {
   if (idUser != undefined) {
     sequelize
       .query(
-        "SELECT * FROM layers WHERE (idUser = " + idUser + ") ORDER BY id DESC",
+        "SELECT * FROM layers WHERE (idUser = " + idUser + ") ORDER BY id",
         {
           type: sequelize.QueryTypes.SELECT
         }
