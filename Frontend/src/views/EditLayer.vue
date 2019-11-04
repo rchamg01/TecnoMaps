@@ -3,125 +3,121 @@
     <v-toolbar flat tile color="rgb(255,255,255)">
       <v-toolbar-title>LAYERS</v-toolbar-title>
     </v-toolbar>
-    <v-card flat v-for="layer in layers" v-bind:key="layer.name">
-      <v-card-title>
-        <v-icon left>map</v-icon>
-        {{layer.name}}
-        <v-card-actions>
-          <v-btn icon @click="show = !show">
-            <v-icon>{{ show ? 'expand_less' : 'expand_more' }}</v-icon>
-          </v-btn>
-        </v-card-actions>
-      </v-card-title>
 
-      <v-expand-transition>
-        <div v-show="show">
-          <v-divider></v-divider>
-
+    <v-list>
+      <v-list-group v-for="layer in layers" v-bind:key="layer.name">
+        <template v-slot:activator>
           <v-card flat>
-            <v-form ref="form" @submit.prevent="submit">
-              <v-container grid-list-xl>
-                <v-layout row justify-space-between>
-                  <v-flex xs4>
-                    <v-text-field
-                      v-model="layer.name"
-                      :rules="rules.name"
-                      label="Name"
-                      placeholder="Name"
-                      hint="Required field"
-                      clearable
-                      required
-                    ></v-text-field>
-                  </v-flex>
-
-                  <v-flex xs4>
-                    <v-text-field
-                      v-model="layer.layerName"
-                      :rules="rules.layerName"
-                      label="Layer Name"
-                      placeholder="Layer Name"
-                      hint="Required field"
-                      clearable
-                      required
-                      disabled
-                    ></v-text-field>
-                  </v-flex>
-
-                  <v-flex xs4>
-                    <v-text-field
-                      v-model="layer.url"
-                      :rules="rules.source"
-                      label="Source"
-                      placeholder="Layer URL"
-                      hint="Required field"
-                      disabled
-                    ></v-text-field>
-                  </v-flex>
-                </v-layout>
-                <v-layout row justify-space-between>
-                  <v-flex xs4>
-                    <v-slider
-                      v-model="layer.opacity"
-                      :rules="rules.opacity"
-                      color="orange"
-                      label="Opacity"
-                      min="1"
-                      max="100"
-                      thumb-label
-                      thumb-size="25"
-                      height="62"
-                      dense
-                    ></v-slider>
-                  </v-flex>
-
-                  <v-flex xs4>
-                    <v-text-field
-                      v-model="form.desc"
-                      label="Description"
-                      placeholder="Layer description"
-                      hint="Optional field"
-                    ></v-text-field>
-                  </v-flex>
-
-                  <v-flex xs4>
-                    <v-text-field
-                      label="Layer visibility minimum scale"
-                      prepend-inner-icon="zoom_out"
-                      placeholder="1:"
-                      outlined
-                    ></v-text-field>
-                  </v-flex>
-                </v-layout>
-                <v-layout row justify-space-between>
-                  <v-flex xs4>
-                    <v-checkbox label="Visible" color="green" v-model="form.visible"></v-checkbox>
-                  </v-flex>
-                  <v-flex xs4>
-                    <v-checkbox disabled label="Proxy" color="green"></v-checkbox>
-                  </v-flex>
-                  <v-flex xs4>
-                    <v-checkbox disabled label="Secured" color="green"></v-checkbox>
-                  </v-flex>
-                </v-layout>
-              </v-container>
-              <v-card-actions>
-                <v-btn text depressed outline @click="resetForm">Cancel</v-btn>
-                <v-spacer></v-spacer>
-                <v-btn
-                  :disabled="!formIsValid"
-                  text
-                  color="primary"
-                  type="submit"
-                  depressed
-                  outline
-                  @click="register"
-                >Register</v-btn>
-              </v-card-actions>
-            </v-form>
+            <v-card-title>
+              <v-icon left>map</v-icon>
+              <v-list-tile-title>{{layer.name}}</v-list-tile-title>
+            </v-card-title>
           </v-card>
-        </div>
-      </v-expand-transition>
-    </v-card>
+        </template>
+
+        <v-card flat>
+          <v-form ref="form" @submit.prevent="submit">
+            <v-container grid-list-xl>
+              <v-layout row justify-space-between>
+                <v-flex xs4>
+                  <v-text-field
+                    v-model="layer.name"
+                    :rules="rules.name"
+                    label="Name"
+                    placeholder="Name"
+                    hint="Required field"
+                    clearable
+                    required
+                  ></v-text-field>
+                </v-flex>
+
+                <v-flex xs4>
+                  <v-text-field
+                    v-model="layer.layerName"
+                    :rules="rules.layerName"
+                    label="Layer Name"
+                    placeholder="Layer Name"
+                    hint="Required field"
+                    clearable
+                    required
+                    disabled
+                  ></v-text-field>
+                </v-flex>
+
+                <v-flex xs4>
+                  <v-text-field
+                    v-model="layer.url"
+                    :rules="rules.source"
+                    label="Source"
+                    placeholder="Layer URL"
+                    hint="Required field"
+                    disabled
+                  ></v-text-field>
+                </v-flex>
+              </v-layout>
+              <v-layout row justify-space-between>
+                <v-flex xs4>
+                  <v-slider
+                    v-model="layer.opacity"
+                    :rules="rules.opacity"
+                    color="orange"
+                    label="Opacity"
+                    min="1"
+                    max="100"
+                    thumb-label
+                    thumb-size="25"
+                    height="62"
+                    dense
+                  ></v-slider>
+                </v-flex>
+
+                <v-flex xs4>
+                  <v-text-field
+                    v-model="form.desc"
+                    label="Description"
+                    placeholder="Layer description"
+                    hint="Optional field"
+                  ></v-text-field>
+                </v-flex>
+
+                <v-flex xs4>
+                  <v-text-field
+                    label="Layer visibility minimum scale"
+                    prepend-inner-icon="zoom_out"
+                    placeholder="1:"
+                    outlined
+                  ></v-text-field>
+                </v-flex>
+              </v-layout>
+              <v-layout row justify-space-between>
+                <v-flex xs4>
+                  <v-checkbox label="Visible" color="green" v-model="form.visible"></v-checkbox>
+                </v-flex>
+                <v-flex xs4>
+                  <v-checkbox disabled label="Proxy" color="green"></v-checkbox>
+                </v-flex>
+                <v-flex xs4>
+                  <v-checkbox disabled label="Secured" color="green"></v-checkbox>
+                </v-flex>
+              </v-layout>
+            </v-container>
+            <v-card-actions>
+              <v-btn text depressed outline @click="resetForm">Cancel</v-btn>
+              <v-spacer></v-spacer>
+              <v-btn
+                :disabled="!formIsValid"
+                text
+                color="primary"
+                type="submit"
+                depressed
+                outline
+                @click="register"
+              >Register</v-btn>
+            </v-card-actions>
+          </v-form>
+        </v-card>
+      </v-list-group>
+    </v-list>
   </v-app>
 </template>
 <script>
@@ -133,10 +129,8 @@ export default {
       layerSource: "",
       opacity: 50,
       desc: "",
-      visible: true,
-      layers: []
+      visible: true
     });
-
     return {
       form: Object.assign({}, defaultForm),
       rules: {
@@ -147,8 +141,8 @@ export default {
       conditions: false,
       snackbarError: false,
       snackbarSuccess: false,
-      show: false,
-      defaultForm
+      defaultForm,
+      layers: []
     };
   },
   computed: {
@@ -157,13 +151,7 @@ export default {
     }
   },
   mounted() {
-    var data = this.$store.getters.getUser;
-    this.$store
-      .dispatch("getLayers", data)
-      .then(() => {
-        this.layers = this.$store.getters.getLayers;
-      })
-      .catch(err => {});
+    this.layers = this.$store.getters.getLayers;
   },
   methods: {
     resetForm() {
@@ -172,9 +160,8 @@ export default {
     },
     submit() {
       this.resetForm();
-    }
-    /*register() {
-      this.snackbarError = true;
+    },
+    register() {
       if (this.form.opacity == null) this.form.opacity = 50;
       var data = {
         name: this.form.name,
@@ -191,7 +178,7 @@ export default {
         .catch(err => {
           this.snackbarError = true;
         });
-    }*/
+    }
   }
 };
 </script>
