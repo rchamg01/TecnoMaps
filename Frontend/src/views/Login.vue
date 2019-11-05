@@ -131,7 +131,6 @@ export default {
       alertContent: ""
     };
   },
-
   methods: {
     login: function() {
       if (
@@ -149,17 +148,16 @@ export default {
           .dispatch("login", { username, password })
           .then(() => this.$router.push({ name: "Map" }))
           .catch(err => {
-            if ((err.status = 404)) {
+            if (err.status == 404) {
               this.alertContent =
                 "No se encontró el usuario o hubo un problema";
-            } else if ((err.status = 500)) {
+            } else if (err.status == 500) {
               this.alertContent = "Hubo un problema en el envío";
             }
             this.alert = true;
           });
       }
     },
-
     register: function() {
       if (
         this.signName == null ||
@@ -181,9 +179,9 @@ export default {
           .dispatch("register", data)
           .then(() => this.$router.push({ name: "Map" }))
           .catch(err => {
-            if ((err.status = 404)) {
+            if (err.status == 404) {
               this.alertContent = "Ese nombre de usuario ya está registrado";
-            } else if ((err.status = 500)) {
+            } else if (err.status == 500) {
               this.alertContent = "Hubo un problema en el envío";
             }
             this.alert = true;
@@ -198,7 +196,6 @@ header {
   background-color: white;
   text-align: center;
 }
-
 .footer {
   opacity: 0.3;
   background-color: #907a55;
