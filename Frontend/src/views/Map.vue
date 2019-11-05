@@ -16,9 +16,13 @@
         :max-zoom="maxZoom"
       ></vl-view>
 
-      <vl-layer-tile v-for="layer in layers" v-bind:key="layer.layerName">
+      <vl-layer-tile
+        v-for="layer in layers"
+        v-bind:key="layer.layerName"
+        :opacity="layer.opacity/100"
+        :visible="visible"
+      >
         <vl-source-wms
-          :opacity="layer.opacity"
           :url="layer.url"
           :params="layer.params"
           :layers="layer.layerName"
@@ -85,6 +89,7 @@ export default {
       imagerySet: "AerialWithLabels",
       componentKey: 0,
       mini: true,
+      visible: true,
       layers: [
         /*{
           //Estados

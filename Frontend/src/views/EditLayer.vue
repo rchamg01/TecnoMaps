@@ -21,7 +21,7 @@
               <v-layout row justify-space-between>
                 <v-flex xs4>
                   <v-text-field
-                    v-model="layer.name"
+                    v-model="layer.layerNameModel"
                     :rules="rules.name"
                     label="Name"
                     placeholder="Name"
@@ -73,7 +73,7 @@
 
                 <v-flex xs4>
                   <v-text-field
-                    v-model="form.desc"
+                    v-model="layer.description"
                     label="Description"
                     placeholder="Layer description"
                     hint="Optional field"
@@ -156,6 +156,9 @@ export default {
       .dispatch("getLayers", data)
       .then(() => {
         this.layers = this.$store.getters.getLayers;
+        for (var i = 0; i < this.layers.length; i++) {
+          this.layers[i].layerNameModel = this.layers[i].name;
+        }
       })
       .catch(err => {});
   },
