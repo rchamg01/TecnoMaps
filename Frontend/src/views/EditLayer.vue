@@ -3,9 +3,17 @@
     <v-toolbar flat tile color="rgb(255,255,255)">
       <v-toolbar-title>LAYERS</v-toolbar-title>
     </v-toolbar>
+    <v-snackbar v-model="snackbarSuccess" absolute top right color="success">
+      <span>Saved successfully!</span>
+      <v-icon dark>mdi-checkbox-marked-circle</v-icon>
+    </v-snackbar>
+    <v-snackbar v-model="snackbarError" absolute top right color="error">
+      <span>An error ocurred</span>
+      <v-icon dark>mdi-close</v-icon>
+    </v-snackbar>
 
     <v-list>
-      <v-list-group v-for="layer in layers" v-bind:key="layer.name">
+      <v-list-group v-for="layer in layers" v-bind:key="layer.id">
         <template v-slot:activator>
           <v-card flat>
             <v-card-title>
@@ -102,17 +110,8 @@
               </v-layout>
             </v-container>
             <v-card-actions>
-              <v-btn text depressed outline @click="resetForm">Cancel</v-btn>
               <v-spacer></v-spacer>
-              <v-btn
-                :disabled="!formIsValid"
-                text
-                color="primary"
-                type="submit"
-                depressed
-                outline
-                @click="register"
-              >Register</v-btn>
+              <v-btn text color="primary" depressed outline @click="save(layer)">Save</v-btn>
             </v-card-actions>
           </v-form>
         </v-card>
@@ -151,39 +150,37 @@ export default {
     }
   },
   mounted() {
-    var data = this.$store.getters.getUser;
-    this.$store
-      .dispatch("getLayers", data)
-      .then(() => {
-        this.layers = this.$store.getters.getLayers;
-        for (var i = 0; i < this.layers.length; i++) {
-          this.layers[i].layerNameModel = this.layers[i].name;
-        }
-      })
-      .catch(err => {});
+    this.requestLayers();
   },
   methods: {
-    resetForm() {
-      this.form = Object.assign({}, this.defaultForm);
-      this.$refs.form.reset();
+    requestLayers() {
+      var data = this.$store.getters.getUser;
+      this.$store
+        .dispatch("getLayers", data)
+        .then(() => {
+          this.layers = this.$store.getters.getLayers;
+          for (var i = 0; i < this.layers.length; i++) {
+            this.layers[i].layerNameModel = this.layers[i].name;
+          }
+        })
+        .catch(err => {});
     },
-    submit() {
-      this.resetForm();
-    },
-    register() {
+    save(layer) {
       if (this.form.opacity == null) this.form.opacity = 50;
       var data = {
-        name: this.form.name,
-        layerName: this.form.layerName,
-        url: this.form.layerSource,
-        opacity: this.form.opacity,
-        desc: this.form.desc,
-        visible: this.form.visible,
+        name: layer.layerNameModel,
+        opacity: layer.opacity,
+        desc: layer.description,
+        visible: layer.visible,
+        id: layer.id,
         idUser: this.$store.getters.getUser.id
       };
       this.$store
-        .dispatch("registerLayer", data)
-        .then(() => (this.snackbarSuccess = true))
+        .dispatch("updateLayer", data)
+        .then(() => {
+          this.snackbarSuccess = true;
+          this.requestLayers();
+        })
         .catch(err => {
           this.snackbarError = true;
         });

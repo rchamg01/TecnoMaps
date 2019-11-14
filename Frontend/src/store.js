@@ -101,6 +101,7 @@ export default new Vuex.Store({
           });
       });
     },
+
     logout({ commit }, user) {
       return new Promise(resolve => {
         commit("logout");
@@ -144,6 +145,26 @@ export default new Vuex.Store({
         })
           .then(resp => {
             commit("layers_success");
+            resolve(resp);
+          })
+          .catch(err => {
+            commit("layers_ error", err);
+            reject(err);
+          });
+      });
+    },
+    updateLayer({ commit }, layer) {
+      return new Promise((resolve, reject) => {
+        commit("layers_request");
+        axios({
+          url: "http://localhost:3000/updateLayer",
+          data: layer,
+          method: "POST"
+        })
+          .then(resp => {
+            const layers = resp.data.layers;
+            commit("layers_success");
+            commit("update_layers", layers);
             resolve(resp);
           })
           .catch(err => {

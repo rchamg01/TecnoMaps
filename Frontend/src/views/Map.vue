@@ -60,7 +60,7 @@
         </v-toolbar>
         <v-list>
           <v-divider></v-divider>
-          <v-list-tile v-for="layer in layers" :key="layer.name">
+          <v-list-tile v-for="layer in layers" :key="layer.id">
             <v-list-tile-avatar>
               <v-switch v-model="layer.visible" :disabled="mini" color="orange" dark></v-switch>
             </v-list-tile-avatar>

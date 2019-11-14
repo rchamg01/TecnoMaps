@@ -99,7 +99,6 @@ export default {
       app: true
     };
   },
-
   computed: {
     username: function() {
       return this.$store.getters.getUser.username;
@@ -119,5 +118,6 @@ export default {
   }
 };
 </script>
+
 
 
