@@ -227,6 +227,39 @@ app.post("/registerLayer", function(req, res) {
   );
 });
 
+app.post("/updateLayer", function(req, res) {
+  var name = req.body.name;
+  var description = req.body.desc;
+  var opacity = req.body.opacity;
+  var visible = req.body.visible;
+  var idUser = req.body.idUser;
+  var id = req.body.id;
+  sequelize
+    .query(
+      "UPDATE layers SET name = '" +
+        name +
+        "', description = '" +
+        description +
+        "', opacity = '" +
+        opacity +
+        "', visible = '" +
+        visible +
+        "' WHERE (idUser = " +
+        idUser +
+        ") AND (id = " +
+        id +
+        ")",
+      { type: sequelize.QueryTypes.UPDATE }
+    )
+    .then(layers => {
+      res.status(200).send({ layers: layers });
+    })
+    .catch(err => {
+      console.log(err);
+      return res.status(500).send("There was a problem on the server.");
+    });
+});
+
 app.listen(port, function() {
   console.log("Example app listening on port " + 3000);
 });
