@@ -1,5 +1,9 @@
 <template>
   <v-app>
+    <v-snackbar v-model="snackbarError" absolute top right color="error">
+      <span>An error ocurred</span>
+      <v-icon dark>mdi-close</v-icon>
+    </v-snackbar>
     <vl-map
       :load-tiles-while-animating="true"
       :load-tiles-while-interacting="true"
@@ -90,6 +94,7 @@ export default {
       componentKey: 0,
       mini: true,
       visible: true,
+      snackbarError: false,
       layers: [
         /*{
           //Estados
@@ -130,7 +135,9 @@ export default {
       .then(() => {
         this.layers = this.$store.getters.getLayers;
       })
-      .catch(err => {});
+      .catch(err => {
+        this.snackbarError = true;
+      });
   },
   methods: {}
 };

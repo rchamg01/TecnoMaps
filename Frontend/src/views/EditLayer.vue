@@ -1,13 +1,16 @@
 <template>
   <v-app>
-    <v-toolbar flat tile color="rgb(255,255,255)">
-      <v-toolbar-title>LAYERS</v-toolbar-title>
-    </v-toolbar>
     <v-progress-linear
       :active="this.$store.getters.layersStatus=='loading'"
       :indeterminate="this.$store.getters.layersStatus=='loading'"
       color="teal"
+      height="4px"
+      bottom
     ></v-progress-linear>
+    <v-toolbar flat tile color="rgb(255,255,255)">
+      <v-toolbar-title>LAYERS</v-toolbar-title>
+    </v-toolbar>
+
     <v-snackbar v-model="snackbarSuccess" absolute top right color="success">
       <span>Saved successfully!</span>
       <v-icon dark>mdi-checkbox-marked-circle</v-icon>
@@ -193,7 +196,9 @@ export default {
             this.layers[i].layerNameModel = this.layers[i].name;
           }
         })
-        .catch(err => {});
+        .catch(err => {
+          this.snackbarError = true;
+        });
     },
     save(layer) {
       if (this.form.opacity == null) this.form.opacity = 50;
