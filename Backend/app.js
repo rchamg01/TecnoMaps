@@ -55,6 +55,7 @@ Layer.init(
     url: Sequelize.STRING,
     opacity: Sequelize.INTEGER,
     visible: Sequelize.INTEGER,
+    deleted: Sequelize.INTEGER,
     idUser: Sequelize.INTEGER
   },
   { sequelize, modelName: "layer" }
@@ -189,7 +190,9 @@ app.post("/getLayers", function(req, res) {
   if (idUser != undefined) {
     sequelize
       .query(
-        "SELECT * FROM layers WHERE (idUser = " + idUser + ") ORDER BY id",
+        "SELECT * FROM layers WHERE (idUser = " +
+          idUser +
+          ") and (deleted = '0') ORDER BY id",
         {
           type: sequelize.QueryTypes.SELECT
         }
@@ -253,6 +256,27 @@ app.post("/updateLayer", function(req, res) {
     )
     .then(layers => {
       res.status(200).send({ layers: layers });
+    })
+    .catch(err => {
+      console.log(err);
+      return res.status(500).send("There was a problem on the server.");
+    });
+});
+
+app.post("/deleteLayer", function(req, res) {
+  var idUser = req.body.idUser;
+  var id = req.body.id;
+  sequelize
+    .query(
+      "UPDATE layers SET deleted = 1  WHERE (idUser = " +
+        idUser +
+        ") AND (id = " +
+        id +
+        ")",
+      { type: sequelize.QueryTypes.UPDATE }
+    )
+    .then(layers => {
+      res.status(200).send({ success: true });
     })
     .catch(err => {
       console.log(err);
