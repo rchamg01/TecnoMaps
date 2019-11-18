@@ -92,6 +92,11 @@ export default {
           link: "/editLayer",
           title: "Gestor de capas",
           icon: "create"
+        },
+        {
+          link: "/users",
+          title: "Gestor de usuarios",
+          icon: "supervised_user_circle"
         }
       ],
       mini: true,
@@ -118,6 +123,3 @@ export default {
   }
 };
 </script>
-
-
-
