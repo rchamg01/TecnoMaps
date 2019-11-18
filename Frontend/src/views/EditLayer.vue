@@ -196,7 +196,6 @@ export default {
         id: layer.id,
         idUser: this.$store.getters.getUser.id
       };
-
       this.$store
         .dispatch("updateLayer", data)
         .then(() => {
@@ -207,13 +206,11 @@ export default {
           this.snackbarError = true;
         });
     },
-
     deleteLayer(layer) {
       var data = {
         id: layer.id,
         idUser: this.$store.getters.getUser.id
       };
-
       this.$store
         .dispatch("deleteLayer", data)
         .then(() => {

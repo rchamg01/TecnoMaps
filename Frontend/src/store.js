@@ -172,6 +172,26 @@ export default new Vuex.Store({
             reject(err);
           });
       });
+    },
+    deleteLayer({ commit }, layer) {
+      return new Promise((resolve, reject) => {
+        commit("layers_request");
+        axios({
+          url: "http://localhost:3000/deleteLayer",
+          data: layer,
+          method: "POST"
+        })
+          .then(resp => {
+            const layers = resp.data.layers;
+            commit("layers_success");
+            commit("update_layers", layers);
+            resolve(resp);
+          })
+          .catch(err => {
+            commit("layers_ error", err);
+            reject(err);
+          });
+      });
     }
   }
 });

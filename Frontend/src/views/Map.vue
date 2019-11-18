@@ -18,7 +18,7 @@
 
       <vl-layer-tile
         v-for="layer in layers"
-        v-bind:key="layer.layerName"
+        v-bind:key="layer.id"
         :opacity="layer.opacity/100"
         :visible="visible"
       >
