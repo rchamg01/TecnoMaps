@@ -2,14 +2,12 @@
   <v-app id="inspire">
     <v-content>
       <v-parallax height="1000" src="https://i.imgur.com/M21XVBk.jpg">
-        <v-alert :value="alert" dense outlined type="error">
-          <v-flex align="center" name="error1">
-            <v-flex class="grow">{{alertContent}}</v-flex>
-            <v-flex class="shrink">
-              <v-btn color="info" outlined @click="alert = !alert" left>OK</v-btn>
-            </v-flex>
-          </v-flex>
-        </v-alert>
+        <v-snackbar v-model="alert" color="error" top right>
+          <v-icon color="white">error_outline</v-icon>
+          &nbsp;&nbsp;&nbsp; {{ alertContent }} &nbsp;&nbsp;&nbsp;
+          <v-icon color="white" @click="alert = false">close</v-icon>
+        </v-snackbar>
+
         <v-layout align-center row justify-space-around>
           <h1 class="display-4 font-weight-bold">
             <span style="color: white">TecnoMaps</span>
@@ -208,10 +206,10 @@ export default {
           .dispatch("login", { username, password })
           .then(() => this.$router.push({ name: "Map" }))
           .catch(err => {
-            if (err.status == 404) {
+            if (err.message.includes("404")) {
               this.alertContent =
                 "No se encontró el usuario o hubo un problema";
-            } else if (err.status == 500) {
+            } else if (err.message.includes("Network")) {
               this.alertContent = "Hubo un problema en el envío";
             }
             this.alert = true;
@@ -239,9 +237,9 @@ export default {
           .dispatch("register", data)
           .then(() => this.$router.push({ name: "Map" }))
           .catch(err => {
-            if (err.status == 404) {
+            if (err.message.includes("404")) {
               this.alertContent = "Ese nombre de usuario ya está registrado";
-            } else if (err.status == 500) {
+            } else if (err.message.includes("Network")) {
               this.alertContent = "Hubo un problema en el envío";
             }
             this.alert = true;
