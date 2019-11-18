@@ -276,7 +276,7 @@ app.post("/deleteLayer", function(req, res) {
       { type: sequelize.QueryTypes.UPDATE }
     )
     .then(layers => {
-      res.status(200).send({ success: true });
+      res.status(200).send({ layer: layers });
     })
     .catch(err => {
       console.log(err);
