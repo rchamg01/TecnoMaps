@@ -7,6 +7,10 @@
       <span>Saved successfully!</span>
       <v-icon dark>mdi-checkbox-marked-circle</v-icon>
     </v-snackbar>
+    <v-snackbar v-model="snackbarSuccessDeleted" absolute top right color="success">
+      <span>Deleted successfully!</span>
+      <v-icon dark>mdi-checkbox-marked-circle</v-icon>
+    </v-snackbar>
     <v-snackbar v-model="snackbarError" absolute top right color="error">
       <span>An error ocurred</span>
       <v-icon dark>mdi-close</v-icon>
@@ -111,6 +115,21 @@
             </v-container>
             <v-card-actions>
               <v-spacer></v-spacer>
+              <v-dialog v-model="dialog" width="500">
+                <template v-slot:activator="{ on }">
+                  <v-btn color="red" outline depressed v-on="on">Delete</v-btn>
+                </template>
+
+                <v-card>
+                  <v-card-title class="headline blue-grey darken-1">Delete</v-card-title>
+                  <v-card-text>Are you sure you want to delete this layer?</v-card-text>
+                  <v-card-actions>
+                    <v-btn color="grey" outline depressed @click="dialog = false">Cancel</v-btn>
+                    <v-spacer></v-spacer>
+                    <v-btn color="red" outline depressed @click="deleteLayer(layer)">DELETE</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
               <v-btn text color="primary" depressed outline @click="save(layer)">Save</v-btn>
             </v-card-actions>
           </v-form>
@@ -137,9 +156,11 @@ export default {
         source: [val => (val || "").length > 0 || "This field is required"],
         layerName: [val => (val || "").length > 0 || "This field is required"]
       },
+      dialog: false,
       conditions: false,
       snackbarError: false,
       snackbarSuccess: false,
+      snackbarSuccessDeleted: false,
       defaultForm,
       layers: []
     };
@@ -175,10 +196,28 @@ export default {
         id: layer.id,
         idUser: this.$store.getters.getUser.id
       };
+
       this.$store
         .dispatch("updateLayer", data)
         .then(() => {
           this.snackbarSuccess = true;
+          this.requestLayers();
+        })
+        .catch(err => {
+          this.snackbarError = true;
+        });
+    },
+
+    deleteLayer(layer) {
+      var data = {
+        id: layer.id,
+        idUser: this.$store.getters.getUser.id
+      };
+
+      this.$store
+        .dispatch("deleteLayer", data)
+        .then(() => {
+          this.snackbarSuccessDeleted = true;
           this.requestLayers();
         })
         .catch(err => {
