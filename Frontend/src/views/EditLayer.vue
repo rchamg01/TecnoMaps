@@ -3,6 +3,11 @@
     <v-toolbar flat tile color="rgb(255,255,255)">
       <v-toolbar-title>LAYERS</v-toolbar-title>
     </v-toolbar>
+    <v-progress-linear
+      :active="this.$store.getters.layersStatus=='loading'"
+      :indeterminate="this.$store.getters.layersStatus=='loading'"
+      color="teal"
+    ></v-progress-linear>
     <v-snackbar v-model="snackbarSuccess" absolute top right color="success">
       <span>Saved successfully!</span>
       <v-icon dark>mdi-checkbox-marked-circle</v-icon>
@@ -115,18 +120,17 @@
             </v-container>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-dialog v-model="dialog" width="500">
-                <template v-slot:activator="{ on }">
-                  <v-btn color="red" outline depressed v-on="on">Delete</v-btn>
-                </template>
 
+              <v-btn color="red" outline depressed @click="showDialog(layer)">Delete</v-btn>
+
+              <v-dialog v-model="dialog" width="500">
                 <v-card>
                   <v-card-title class="headline blue-grey darken-1">Delete</v-card-title>
                   <v-card-text>Are you sure you want to delete this layer?</v-card-text>
                   <v-card-actions>
                     <v-btn color="grey" outline depressed @click="dialog = false">Cancel</v-btn>
                     <v-spacer></v-spacer>
-                    <v-btn color="red" outline depressed @click="deleteLayer(layer)">DELETE</v-btn>
+                    <v-btn color="red" outline depressed @click="deleteLayer()">DELETE</v-btn>
                   </v-card-actions>
                 </v-card>
               </v-dialog>
@@ -162,6 +166,7 @@ export default {
       snackbarSuccess: false,
       snackbarSuccessDeleted: false,
       defaultForm,
+      dialogId: "",
       layers: []
     };
   },
@@ -174,6 +179,10 @@ export default {
     this.requestLayers();
   },
   methods: {
+    showDialog(layer) {
+      this.dialog = true;
+      this.dialogId = layer.id;
+    },
     requestLayers() {
       var data = this.$store.getters.getUser;
       this.$store
@@ -188,6 +197,7 @@ export default {
     },
     save(layer) {
       if (this.form.opacity == null) this.form.opacity = 50;
+      console.log(layer.id);
       var data = {
         name: layer.layerNameModel,
         opacity: layer.opacity,
@@ -206,9 +216,9 @@ export default {
           this.snackbarError = true;
         });
     },
-    deleteLayer(layer) {
+    deleteLayer() {
       var data = {
-        id: layer.id,
+        id: this.dialogId,
         idUser: this.$store.getters.getUser.id
       };
       this.$store
