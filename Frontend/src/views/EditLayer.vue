@@ -118,7 +118,7 @@
               </v-layout>
               <v-layout row justify-space-between>
                 <v-flex xs4>
-                  <v-checkbox label="Visible" color="green" v-model="form.visible"></v-checkbox>
+                  <v-checkbox label="Visible" color="green" v-model="layer.visible"></v-checkbox>
                 </v-flex>
                 <v-flex xs4>
                   <v-checkbox disabled label="Proxy" color="green"></v-checkbox>
@@ -218,7 +218,7 @@ export default {
           name: layer.layerNameModel,
           opacity: layer.opacity,
           desc: layer.description,
-          visible: layer.visible,
+          visible: this.visible(layer),
           id: layer.id,
           idUser: this.$store.getters.getUser.id
         };
@@ -247,6 +247,10 @@ export default {
         .catch(err => {
           this.snackbarError = true;
         });
+    },
+    visible(layer) {
+      if (layer.visible) return 1;
+      else return 0;
     }
   }
 };
