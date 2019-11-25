@@ -211,7 +211,6 @@ export default {
     },
     save(layer) {
       if (this.form.opacity == null) this.form.opacity = 50;
-      console.log(layer.id);
       var data = {
         name: layer.layerNameModel,
         opacity: layer.opacity,
