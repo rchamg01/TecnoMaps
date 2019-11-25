@@ -1,8 +1,8 @@
 <template>
   <v-app>
     <v-progress-linear
-      :active="this.$store.getters.layersStatus=='loading'"
-      :indeterminate="this.$store.getters.layersStatus=='loading'"
+      :active="this.$store.getters.layersStatus == 'loading'"
+      :indeterminate="this.$store.getters.layersStatus == 'loading'"
       color="teal"
       height="4px"
       bottom
@@ -15,7 +15,13 @@
       <span>Saved successfully!</span>
       <v-icon dark>mdi-checkbox-marked-circle</v-icon>
     </v-snackbar>
-    <v-snackbar v-model="snackbarSuccessDeleted" absolute top right color="success">
+    <v-snackbar
+      v-model="snackbarSuccessDeleted"
+      absolute
+      top
+      right
+      color="success"
+    >
       <span>Deleted successfully!</span>
       <v-icon dark>mdi-checkbox-marked-circle</v-icon>
     </v-snackbar>
@@ -23,8 +29,7 @@
       <span>An error ocurred</span>
       <v-icon dark>mdi-close</v-icon>
     </v-snackbar>
-
-    <v-list>
+    <!--<v-list>
       <v-list-group v-for="layer in layers" v-bind:key="layer.id">
         <template v-slot:activator>
           <v-card flat>
@@ -142,7 +147,22 @@
           </v-form>
         </v-card>
       </v-list-group>
-    </v-list>
+    </v-list>-->
+    <v-data-table :headers="headers" :items="users" hide-actions>
+      <template slot="headerCell" slot-scope="{ header }">
+        <span
+          class="subheading font-weight-light text-success text--darken-3"
+          v-text="header.text"
+        />
+      </template>
+      <template v-slot:items="users">
+        <td>{{ users.item.username }}</td>
+        <td>{{ users.item.email }}</td>
+        <td>{{ users.item.password }}</td>
+        <td>{{ users.item.id }}</td>
+        <td>{{ users.item.active }}</td>
+      </template>
+    </v-data-table>
   </v-app>
 </template>
 <script>
@@ -156,6 +176,7 @@ export default {
       desc: "",
       visible: true
     });
+
     return {
       form: Object.assign({}, defaultForm),
       rules: {
@@ -170,7 +191,49 @@ export default {
       snackbarSuccessDeleted: false,
       defaultForm,
       dialogId: "",
-      layers: []
+
+      headers: [
+        {
+          text: "username",
+          value: "username"
+        },
+        {
+          text: "e-mail",
+          value: "email"
+        },
+        {
+          text: "password",
+          value: "password"
+        },
+        {
+          text: "id",
+          value: "id"
+        },
+        {
+          text: "active",
+          value: "active"
+        }
+      ],
+      users: [
+        /* {
+          userName: "rchamg01",
+          email: "rchamg01@estudiantes.unileon.es",
+          password: "1234",
+          id: "1998"
+        },
+        {
+          userName: "aferns16",
+          email: "aferns16@estudiantes.unileon.es",
+          password: "1236",
+          id: "1999"
+        },
+        {
+          userName: "gneid92",
+          email: "gneid92@estudiantes.unileon.es",
+          password: "5236",
+          id: "2000"
+        }*/
+      ]
     };
   },
   computed: {
@@ -179,14 +242,26 @@ export default {
     }
   },
   mounted() {
-    this.requestLayers();
+    this.requestUsers();
   },
   methods: {
     showDialog(layer) {
       this.dialog = true;
       this.dialogId = layer.id;
     },
-    requestLayers() {
+    requestUsers() {
+      var data = this.$store.getters.getUser;
+      this.$store
+        .dispatch("getUsers")
+        .then(() => {
+          this.users = this.$store.getters.getUsers;
+          //console.log(this.users);
+        })
+        .catch(err => {
+          this.snackbarError = true;
+        });
+    }
+    /*requestLayers() {
       var data = this.$store.getters.getUser;
       this.$store
         .dispatch("getLayers", data)
@@ -235,10 +310,9 @@ export default {
         .catch(err => {
           this.snackbarError = true;
         });
-    }
+    }*/
   }
 };
 </script>
 
-<style scoped type="text/css">
-</style>
+<style scoped type="text/css"></style>
