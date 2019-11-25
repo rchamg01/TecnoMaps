@@ -122,15 +122,25 @@ app.post("/register", function(req, res) {
                   let token = jwt.sign({ id: users[0].id }, config.secret, {
                     expiresIn: 86400 // expires in 24 hours
                   });
-                  sequelize.sync().then(() =>
-                    User_type.create({
-                      type_name: "standard",
-                      idUser: users[0].id
+                  sequelize
+                    .sync()
+                    .then(() =>
+                      User_type.create({
+                        type_name: "standard",
+                        idUser: users[0].id
+                      })
+                    )
+                    .then(() => {
+                      res
+                        .status(200)
+                        .send({ auth: true, token: token, user: users[0] });
                     })
-                  );
-                  res
-                    .status(200)
-                    .send({ auth: true, token: token, user: users[0] });
+                    .catch(err => {
+                      console.log(err);
+                      return res
+                        .status(500)
+                        .send("There was a problem getting user");
+                    });
                 })
                 .catch(err => {
                   console.log(err);
