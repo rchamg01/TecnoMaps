@@ -26,6 +26,10 @@
       <span>An error ocurred</span>
       <v-icon dark>mdi-close</v-icon>
     </v-snackbar>
+    <v-snackbar v-model="snackbarEmpty" absolute top right color="error">
+      <span>The layer name is empty!</span>
+      <v-icon dark>mdi-close</v-icon>
+    </v-snackbar>
 
     <v-list>
       <v-list-group v-for="layer in layers" v-bind:key="layer.id">
@@ -175,17 +179,13 @@ export default {
       dialog: false,
       conditions: false,
       snackbarError: false,
+      snackbarEmpty: false,
       snackbarSuccess: false,
       snackbarSuccessDeleted: false,
       defaultForm,
       dialogId: "",
       layers: []
     };
-  },
-  computed: {
-    formIsValid() {
-      return this.form.name && this.form.layerSource && this.form.layerName;
-    }
   },
   mounted() {
     this.requestLayers();
@@ -210,24 +210,28 @@ export default {
         });
     },
     save(layer) {
-      if (this.form.opacity == null) this.form.opacity = 50;
-      var data = {
-        name: layer.layerNameModel,
-        opacity: layer.opacity,
-        desc: layer.description,
-        visible: layer.visible,
-        id: layer.id,
-        idUser: this.$store.getters.getUser.id
-      };
-      this.$store
-        .dispatch("updateLayer", data)
-        .then(() => {
-          this.snackbarSuccess = true;
-          this.requestLayers();
-        })
-        .catch(err => {
-          this.snackbarError = true;
-        });
+      if (!layer.layerNameModel) {
+        this.snackbarEmpty = true;
+      } else {
+        if (this.form.opacity == null) this.form.opacity = 50;
+        var data = {
+          name: layer.layerNameModel,
+          opacity: layer.opacity,
+          desc: layer.description,
+          visible: layer.visible,
+          id: layer.id,
+          idUser: this.$store.getters.getUser.id
+        };
+        this.$store
+          .dispatch("updateLayer", data)
+          .then(() => {
+            this.snackbarSuccess = true;
+            this.requestLayers();
+          })
+          .catch(err => {
+            this.snackbarError = true;
+          });
+      }
     },
     deleteLayer() {
       var data = {
