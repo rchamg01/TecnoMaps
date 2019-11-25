@@ -1,6 +1,6 @@
 <template>
   <v-app>
-     <v-card flat
+    <v-card flat
       ><v-progress-linear
         :active="this.$store.getters.layersStatus == 'loading'"
         :indeterminate="this.$store.getters.layersStatus == 'loading'"
@@ -18,7 +18,13 @@
       <span>Saved successfully!</span>
       <v-icon dark>mdi-checkbox-marked-circle</v-icon>
     </v-snackbar>
-    <v-snackbar v-model="snackbarSuccessDeleted" absolute top right color="success">
+    <v-snackbar
+      v-model="snackbarSuccessDeleted"
+      absolute
+      top
+      right
+      color="success"
+    >
       <span>Deleted successfully!</span>
       <v-icon dark>mdi-checkbox-marked-circle</v-icon>
     </v-snackbar>
@@ -33,7 +39,7 @@
           <v-card flat>
             <v-card-title>
               <v-icon left>map</v-icon>
-              {{layer.name}}
+              {{ layer.name }}
             </v-card-title>
           </v-card>
         </template>
@@ -114,33 +120,75 @@
               </v-layout>
               <v-layout row justify-space-between>
                 <v-flex xs4>
-                  <v-checkbox label="Visible" color="green" v-model="form.visible"></v-checkbox>
+                  <v-checkbox
+                    label="Visible"
+                    color="green"
+                    v-model="form.visible"
+                  ></v-checkbox>
                 </v-flex>
                 <v-flex xs4>
                   <v-checkbox disabled label="Proxy" color="green"></v-checkbox>
                 </v-flex>
                 <v-flex xs4>
-                  <v-checkbox disabled label="Secured" color="green"></v-checkbox>
+                  <v-checkbox
+                    disabled
+                    label="Secured"
+                    color="green"
+                  ></v-checkbox>
                 </v-flex>
               </v-layout>
             </v-container>
             <v-card-actions>
-              <v-spacer></v-spacer>
+              <v-container grid-list-xl>
+                <v-layout row justify-space-between>
+                  <v-btn
+                    color="red"
+                    outline
+                    depressed
+                    @click="showDialog(layer)"
+                    >Delete</v-btn
+                  >
 
-              <v-btn color="red" outline depressed @click="showDialog(layer)">Delete</v-btn>
+                  <v-dialog v-model="dialog" width="300">
+                    <v-card>
+                      <v-card-title
+                        class="headline blue-grey darken-1 white--text"
+                        >Delete</v-card-title
+                      >
+                      <v-card-text
+                        >Are you sure you want to delete this
+                        layer?</v-card-text
+                      >
+                      <v-card-actions>
+                        <v-btn
+                          color="grey"
+                          outline
+                          depressed
+                          @click="dialog = false"
+                          >Cancel</v-btn
+                        >
+                        <v-spacer></v-spacer>
+                        <v-btn
+                          color="red"
+                          outline
+                          depressed
+                          @click="deleteLayer()"
+                          >DELETE</v-btn
+                        >
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
 
-              <v-dialog v-model="dialog" width="500">
-                <v-card>
-                  <v-card-title class="headline blue-grey darken-1">Delete</v-card-title>
-                  <v-card-text>Are you sure you want to delete this layer?</v-card-text>
-                  <v-card-actions>
-                    <v-btn color="grey" outline depressed @click="dialog = false">Cancel</v-btn>
-                    <v-spacer></v-spacer>
-                    <v-btn color="red" outline depressed @click="deleteLayer()">DELETE</v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-              <v-btn text color="primary" depressed outline @click="save(layer)">Save</v-btn>
+                  <v-btn
+                    text
+                    color="primary"
+                    depressed
+                    outline
+                    @click="save(layer)"
+                    >Save</v-btn
+                  ></v-layout
+                ></v-container
+              >
             </v-card-actions>
           </v-form>
         </v-card>
@@ -243,5 +291,4 @@ export default {
 };
 </script>
 
-<style scoped type="text/css">
-</style>
+<style scoped type="text/css"></style>

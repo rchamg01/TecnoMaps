@@ -88,7 +88,11 @@
           </v-layout>
           <v-layout row justify-space-between>
             <v-flex xs4>
-              <v-checkbox label="Visible" color="green" v-model="form.visible"></v-checkbox>
+              <v-checkbox
+                label="Visible"
+                color="green"
+                v-model="form.visible"
+              ></v-checkbox>
             </v-flex>
             <v-flex xs4>
               <v-checkbox label="Proxy" color="green"></v-checkbox>
@@ -99,17 +103,22 @@
           </v-layout>
         </v-container>
         <v-card-actions>
-          <v-btn text depressed outline @click="resetForm">Cancel</v-btn>
-          <v-spacer></v-spacer>
-          <v-btn
-            :disabled="!formIsValid"
-            text
-            color="primary"
-            type="submit"
-            depressed
-            outline
-            @click="register"
-          >Register</v-btn>
+          <v-container grid-list-xl>
+            <v-layout row justify-space-between>
+              <v-btn text depressed outline @click="resetForm">Cancel</v-btn>
+              <v-spacer></v-spacer>
+              <v-btn
+                :disabled="!formIsValid"
+                text
+                color="primary"
+                type="submit"
+                depressed
+                outline
+                @click="register"
+                >Register</v-btn
+              ></v-layout
+            ></v-container
+          >
         </v-card-actions>
       </v-form>
     </v-card>
@@ -126,7 +135,6 @@ export default {
       desc: "",
       visible: true
     });
-
     return {
       form: Object.assign({}, defaultForm),
       rules: {
@@ -175,5 +183,4 @@ export default {
 };
 </script>
 
-<style scoped type="text/css">
-</style>
+<style scoped type="text/css"></style>
