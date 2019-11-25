@@ -37,13 +37,21 @@ sequelize
 class User extends Sequelize.Model {}
 User.init(
   {
-    user_type: Sequelize.STRING,
     email: Sequelize.STRING,
     password: Sequelize.STRING,
     username: Sequelize.STRING,
     active: Sequelize.INTEGER
   },
   { sequelize, modelName: "user" }
+);
+
+class User_type extends Sequelize.Model {}
+User_type.init(
+  {
+    type_name: Sequelize.STRING,
+    idUser: Sequelize.INTEGER
+  },
+  { sequelize, modelName: "user_type" }
 );
 
 class Layer extends Sequelize.Model {}
@@ -160,7 +168,7 @@ app.post("/login", function(req, res) {
         });
         res.status(200).send({ auth: true, token: token, user: users[0] });
       } else {
-        return res.status(404).send("No user found.");
+        return res.status(404).send({ message: "No user found." });
       }
     })
     .catch(err => {
@@ -277,6 +285,33 @@ app.post("/deleteLayer", function(req, res) {
     )
     .then(layers => {
       res.status(200).send({ layer: layers });
+    })
+    .catch(err => {
+      console.log(err);
+      return res.status(500).send("There was a problem on the server.");
+    });
+});
+
+app.get("/getUsers", function(req, res) {
+  sequelize
+    .query("SELECT * FROM users", { type: sequelize.QueryTypes.SELECT })
+    .then(users => {
+      res.status(200).send({ users: users });
+    })
+    .catch(err => {
+      console.log(err);
+      return res.status(500).send("There was a problem on the server.");
+    });
+});
+
+app.post("/getUser_Type", function(req, res) {
+  var idUser = req.body.idUser;
+  sequelize
+    .query("SELECT * FROM user_type WHERE (idUser = " + idUser + ")", {
+      type: sequelize.QueryTypes.SELECT
+    })
+    .then(users => {
+      res.status(200).send({ user_type: users });
     })
     .catch(err => {
       console.log(err);
