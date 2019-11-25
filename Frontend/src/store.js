@@ -8,16 +8,21 @@ export default new Vuex.Store({
   getters: {
     getUser: state => state.user,
     getLayers: state => state.layers,
+    getUsers: state => state.users,
     isLoggedIn: state => !!state.token,
-    authStatus: state => state.status
+    authStatus: state => state.status,
+    layersStatus: state => state.layersStatus,
+    usersStatus: state => state.usersStatus
   },
 
   state: {
     status: "",
     layersStatus: "",
+    usersStatus: "",
     token: localStorage.getItem("token") || "",
     user: "",
-    layers: []
+    layers: [],
+    users: []
   },
   mutations: {
     update_user(state, user) {
@@ -48,6 +53,18 @@ export default new Vuex.Store({
     },
     layers_error(state) {
       state.layersStatus = "error";
+    },
+    update_users(state, users) {
+      state.users = users;
+    },
+    users_request(state) {
+      state.usersStatus = "loading";
+    },
+    users_success(state) {
+      state.usersStatus = "success";
+    },
+    users_error(state) {
+      state.usersStatus = "error";
     }
   },
   actions: {
@@ -189,6 +206,25 @@ export default new Vuex.Store({
           })
           .catch(err => {
             commit("layers_ error", err);
+            reject(err);
+          });
+      });
+    },
+    getUsers({ commit }) {
+      return new Promise((resolve, reject) => {
+        commit("users_request");
+        axios({
+          url: "http://localhost:3000/getUsers",
+          method: "GET"
+        })
+          .then(resp => {
+            const users = resp.data.users;
+            commit("users_success");
+            commit("update_users", users);
+            resolve(resp);
+          })
+          .catch(err => {
+            commit("users_error");
             reject(err);
           });
       });
