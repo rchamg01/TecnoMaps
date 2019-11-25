@@ -1,7 +1,7 @@
 <template>
   <v-app>
-    <v-card flat
-      ><v-progress-linear
+    <v-card flat>
+      <v-progress-linear
         :active="this.$store.getters.usersStatus == 'loading'"
         :indeterminate="this.$store.getters.usersStatus == 'loading'"
         absolute
@@ -17,13 +17,7 @@
       <span>Saved successfully!</span>
       <v-icon dark>mdi-checkbox-marked-circle</v-icon>
     </v-snackbar>
-    <v-snackbar
-      v-model="snackbarSuccessDeleted"
-      absolute
-      top
-      right
-      color="success"
-    >
+    <v-snackbar v-model="snackbarSuccessDeleted" absolute top right color="success">
       <span>Deleted successfully!</span>
       <v-icon dark>mdi-checkbox-marked-circle</v-icon>
     </v-snackbar>
@@ -45,12 +39,7 @@
         <td>{{ users.item.email }}</td>
         <td>{{ users.item.password }}</td>
         <td>
-          <v-checkbox
-            v-model="users.item.active"
-            readonly="readonly"
-            color="success"
-            hide-details
-          ></v-checkbox>
+          <v-checkbox v-model="users.item.active" readonly="readonly" color="success" hide-details></v-checkbox>
         </td>
       </template>
     </v-data-table>
@@ -67,24 +56,23 @@ export default {
       snackbarSuccessDeleted: false,
       headers: [
         {
-          text: "id",
+          text: "ID",
           value: "id"
         },
         {
-          text: "username",
+          text: "Username",
           value: "username"
         },
         {
-          text: "e-mail",
+          text: "E-mail",
           value: "email"
         },
         {
-          text: "password",
+          text: "Password",
           value: "password"
         },
-
         {
-          text: "active",
+          text: "Active",
           value: "active"
         }
       ],

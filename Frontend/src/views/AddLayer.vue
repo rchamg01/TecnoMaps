@@ -88,11 +88,7 @@
           </v-layout>
           <v-layout row justify-space-between>
             <v-flex xs4>
-              <v-checkbox
-                label="Visible"
-                color="green"
-                v-model="form.visible"
-              ></v-checkbox>
+              <v-checkbox label="Visible" color="green" v-model="form.visible"></v-checkbox>
             </v-flex>
             <v-flex xs4>
               <v-checkbox label="Proxy" color="green"></v-checkbox>
@@ -115,10 +111,9 @@
                 depressed
                 outline
                 @click="register"
-                >Register</v-btn
-              ></v-layout
-            ></v-container
-          >
+              >Register</v-btn>
+            </v-layout>
+          </v-container>
         </v-card-actions>
       </v-form>
     </v-card>

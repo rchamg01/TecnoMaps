@@ -204,7 +204,9 @@ export default {
         let password = this.loginPass;
         this.$store
           .dispatch("login", { username, password })
-          .then(() => this.$router.push({ name: "Map" }))
+          .then(() => {
+            this.$router.push({ name: "Map" });
+          })
           .catch(err => {
             if (err.message.includes("404")) {
               this.alertContent =
@@ -235,7 +237,9 @@ export default {
         };
         this.$store
           .dispatch("register", data)
-          .then(() => this.$router.push({ name: "Map" }))
+          .then(() => {
+            this.$router.push({ name: "Map" });
+          })
           .catch(err => {
             if (err.message.includes("404")) {
               this.alertContent = "Ese nombre de usuario ya está registrado";

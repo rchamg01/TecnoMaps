@@ -9,20 +9,24 @@ export default new Vuex.Store({
     getUser: state => state.user,
     getLayers: state => state.layers,
     getUsers: state => state.users,
+    getUser_type: state => state.user_type,
     isLoggedIn: state => !!state.token,
     authStatus: state => state.status,
     layersStatus: state => state.layersStatus,
-    usersStatus: state => state.usersStatus
+    usersStatus: state => state.usersStatus,
+    user_typeStatus: state => state.user_typeStatus
   },
 
   state: {
     status: "",
     layersStatus: "",
     usersStatus: "",
+    user_typeStatus: "",
     token: localStorage.getItem("token") || "",
     user: "",
     layers: [],
-    users: []
+    users: [],
+    user_type: ""
   },
   mutations: {
     update_user(state, user) {
@@ -65,6 +69,18 @@ export default new Vuex.Store({
     },
     users_error(state) {
       state.usersStatus = "error";
+    },
+    update_user_type(state, user_type) {
+      state.user_type = user_type;
+    },
+    user_type_request(state) {
+      state.user_typeStatus = "loading";
+    },
+    user_type_success(state) {
+      state.user_typeStatus = "success";
+    },
+    user_type_error(state) {
+      state.user_typeStatus = "error";
     }
   },
   actions: {
@@ -225,6 +241,26 @@ export default new Vuex.Store({
           })
           .catch(err => {
             commit("users_error");
+            reject(err);
+          });
+      });
+    },
+    getUser_type({ commit }, user) {
+      return new Promise((resolve, reject) => {
+        commit("user_type_request");
+        axios({
+          url: "http://localhost:3000/getUser_Type",
+          data: user,
+          method: "POST"
+        })
+          .then(resp => {
+            const user_type = resp.data.user_type;
+            commit("user_type_success");
+            commit("update_user_type", user_type);
+            resolve(resp);
+          })
+          .catch(err => {
+            commit("user_type_error");
             reject(err);
           });
       });
