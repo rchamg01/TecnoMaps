@@ -317,7 +317,6 @@ app.post("/getUser_Type", function(req, res) {
     })
     .then(users => {
       res.status(200).send({ user_type: users[0] });
-      console.log(users[0]);
     })
     .catch(err => {
       console.log(err);
