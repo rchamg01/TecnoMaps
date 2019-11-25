@@ -35,7 +35,7 @@
               <v-flex xs6>
                 <v-tabs v-model="model" centered color="#907A55" dark slider-color="yellow">
                   <v-tab ripple>SIGN UP</v-tab>
-                  <v-tab ripple>LOGIN IN</v-tab>
+                  <v-tab ripple>LOG IN</v-tab>
 
                   <v-tab-item>
                     <!--SIGN-->
@@ -97,8 +97,8 @@
                         <v-form>
                           <v-text-field
                             prepend-icon="person"
-                            name="login"
-                            label="Login"
+                            name="username"
+                            label="Username"
                             type="text"
                             v-model="loginName"
                             :rules="rules.loginName"
@@ -150,7 +150,6 @@ export default {
   data() {
     return {
       model: "tab-2",
-      address: "http://" + location.host + ":3000",
       loginName: null,
       loginPass: null,
       email: null,
