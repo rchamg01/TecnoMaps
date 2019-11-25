@@ -110,7 +110,6 @@ app.post("/register", function(req, res) {
             username: user,
             password: pass,
             email: mail,
-            user_type: "Operario",
             active: 1
           })
             .then(() => {
@@ -123,6 +122,12 @@ app.post("/register", function(req, res) {
                   let token = jwt.sign({ id: users[0].id }, config.secret, {
                     expiresIn: 86400 // expires in 24 hours
                   });
+                  sequelize.sync().then(() =>
+                    User_type.create({
+                      type_name: "standard",
+                      idUser: users[0].id
+                    })
+                  );
                   res
                     .status(200)
                     .send({ auth: true, token: token, user: users[0] });
@@ -305,13 +310,14 @@ app.get("/getUsers", function(req, res) {
 });
 
 app.post("/getUser_Type", function(req, res) {
-  var idUser = req.body.idUser;
+  var idUser = req.body.data.id;
   sequelize
-    .query("SELECT * FROM user_type WHERE (idUser = " + idUser + ")", {
+    .query("SELECT * FROM user_types WHERE (idUser = " + idUser + ")", {
       type: sequelize.QueryTypes.SELECT
     })
     .then(users => {
-      res.status(200).send({ user_type: users });
+      res.status(200).send({ user_type: users[0] });
+      console.log(users[0]);
     })
     .catch(err => {
       console.log(err);
