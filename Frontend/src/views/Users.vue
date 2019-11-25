@@ -1,16 +1,18 @@
 <template>
   <v-app>
-    <v-progress-linear
-      :active="this.$store.getters.layersStatus == 'loading'"
-      :indeterminate="this.$store.getters.layersStatus == 'loading'"
-      color="teal"
-      height="4px"
-      bottom
-    ></v-progress-linear>
-    <v-toolbar flat tile color="rgb(255,255,255)">
-      <v-toolbar-title>USERS</v-toolbar-title>
-    </v-toolbar>
-
+    <v-card flat
+      ><v-progress-linear
+        :active="this.$store.getters.usersStatus == 'loading'"
+        :indeterminate="this.$store.getters.usersStatus == 'loading'"
+        absolute
+        bottom
+        height="4px"
+        color="teal"
+      ></v-progress-linear>
+      <v-toolbar color="rgb(255,255,255)" flat>
+        <v-toolbar-title>USERS</v-toolbar-title>
+      </v-toolbar>
+    </v-card>
     <v-snackbar v-model="snackbarSuccess" absolute top right color="success">
       <span>Saved successfully!</span>
       <v-icon dark>mdi-checkbox-marked-circle</v-icon>
@@ -29,7 +31,7 @@
       <span>An error ocurred</span>
       <v-icon dark>mdi-close</v-icon>
     </v-snackbar>
-   
+
     <v-data-table :headers="headers" :items="users" hide-actions>
       <template slot="headerCell" slot-scope="{ header }">
         <span
@@ -38,11 +40,18 @@
         />
       </template>
       <template v-slot:items="users">
+        <td>{{ users.item.id }}</td>
         <td>{{ users.item.username }}</td>
         <td>{{ users.item.email }}</td>
         <td>{{ users.item.password }}</td>
-        <td>{{ users.item.id }}</td>
-        <td>{{ users.item.active }}</td>
+        <td>
+          <v-checkbox
+            v-model="users.item.active"
+            readonly="readonly"
+            color="success"
+            hide-details
+          ></v-checkbox>
+        </td>
       </template>
     </v-data-table>
   </v-app>
@@ -56,8 +65,11 @@ export default {
       snackbarError: false,
       snackbarSuccess: false,
       snackbarSuccessDeleted: false,
-
       headers: [
+        {
+          text: "id",
+          value: "id"
+        },
         {
           text: "username",
           value: "username"
@@ -70,20 +82,17 @@ export default {
           text: "password",
           value: "password"
         },
-        {
-          text: "id",
-          value: "id"
-        },
+
         {
           text: "active",
           value: "active"
         }
       ],
-      users: []
+      users: [],
+      readonly: true
     };
   },
-  computed: {    
-  },
+  computed: {},
   mounted() {
     this.requestUsers();
   },

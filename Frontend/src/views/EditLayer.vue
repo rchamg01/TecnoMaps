@@ -1,15 +1,18 @@
 <template>
   <v-app>
-    <v-progress-linear
-      :active="this.$store.getters.layersStatus=='loading'"
-      :indeterminate="this.$store.getters.layersStatus=='loading'"
-      color="teal"
-      height="4px"
-      bottom
-    ></v-progress-linear>
-    <v-toolbar flat tile color="rgb(255,255,255)">
-      <v-toolbar-title>LAYERS</v-toolbar-title>
-    </v-toolbar>
+     <v-card flat
+      ><v-progress-linear
+        :active="this.$store.getters.layersStatus == 'loading'"
+        :indeterminate="this.$store.getters.layersStatus == 'loading'"
+        absolute
+        bottom
+        height="4px"
+        color="teal"
+      ></v-progress-linear>
+      <v-toolbar color="rgb(255,255,255)" flat>
+        <v-toolbar-title>LAYERS</v-toolbar-title>
+      </v-toolbar>
+    </v-card>
 
     <v-snackbar v-model="snackbarSuccess" absolute top right color="success">
       <span>Saved successfully!</span>
