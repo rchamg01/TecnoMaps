@@ -12,6 +12,9 @@
       <v-toolbar color="rgb(255,255,255)" flat>
         <v-toolbar-title>USERS</v-toolbar-title>
       </v-toolbar>
+      <v-toolbar color="rgb(255,255,255)" flat>
+        <v-text-field label="Search" v-model="search"></v-text-field>
+      </v-toolbar>
     </v-card>
     <v-snackbar v-model="snackbarSuccess" absolute top right color="success">
       <span>Saved successfully!</span>
@@ -26,7 +29,7 @@
       <v-icon dark>mdi-close</v-icon>
     </v-snackbar>
 
-    <v-data-table :headers="headers" :items="users" hide-actions>
+    <v-data-table :headers="headers" :items="users" :search="this.search" hide-actions>
       <template slot="headerCell" slot-scope="{ header }">
         <span
           class="subheading font-weight-light text-success text--darken-3"
@@ -77,7 +80,8 @@ export default {
         }
       ],
       users: [],
-      readonly: true
+      readonly: true,
+      search: ""
     };
   },
   computed: {},
