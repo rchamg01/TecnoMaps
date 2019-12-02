@@ -264,6 +264,26 @@ export default new Vuex.Store({
             reject(err);
           });
       });
+    },
+    deleteUser({ commit }, user) {
+      return new Promise((resolve, reject) => {
+        commit("users_request");
+        axios({
+          url: "http://localhost:3000/deleteUser",
+          data: user,
+          method: "POST"
+        })
+          .then(resp => {
+            const users = resp.data.users;
+            commit("users_success");
+            commit("update_users", users);
+            resolve(resp);
+          })
+          .catch(err => {
+            commit("users_error", err);
+            reject(err);
+          });
+      });
     }
   }
 });
