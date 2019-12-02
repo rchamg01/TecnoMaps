@@ -33,16 +33,17 @@
                 </v-carousel>
               </v-flex>
               <v-flex xs6>
-                <v-tabs v-model="model" centered color="#907A55" dark slider-color="yellow">
+                <v-tabs v-model="model" centered color="rgb(84, 110, 122,0.8)" dark slider-color="blue-grey lighten-4">
                   <v-tab ripple>SIGN UP</v-tab>
                   <v-tab ripple>LOG IN</v-tab>
 
                   <v-tab-item>
                     <!--SIGN-->
-                    <v-card flat class="elevation">
+                    <v-card color="rgb(255,255,255,0.7)" flat class="elevation">
                       <v-card-text>
                         <v-form>
                           <v-text-field
+                          color="#78909C"
                             prepend-icon="alternate_email"
                             name="e-mail"
                             label="E-mail"
@@ -55,6 +56,7 @@
                             required
                           ></v-text-field>
                           <v-text-field
+                          color="#78909C"
                             prepend-icon="person"
                             name="signName"
                             label="Username"
@@ -67,6 +69,7 @@
                             required
                           ></v-text-field>
                           <v-text-field
+                          color="#78909C"
                             prepend-icon="lock"
                             name="password"
                             label="Password"                           
@@ -89,7 +92,7 @@
                           round
                           depressed
                           class="white--text"
-                          color="#907A55"
+                          color="rgb(84, 110, 122, 0.7)"
                           @click="register"
                           :disabled="!signIsValid"
                           
@@ -99,10 +102,11 @@
                   </v-tab-item>
                   <v-tab-item>
                     <!--item-->
-                    <v-card flat class="elevation">
+                    <v-card  color="rgb(255,255,255,0.7)" flat class="elevation">
                       <v-card-text>
                         <v-form>
                           <v-text-field
+                          color="#78909C"
                             prepend-icon="person"
                             name="username"
                             label="Username"
@@ -114,6 +118,7 @@
                             required
                           ></v-text-field>
                           <v-text-field
+                          color="#78909C"
                             prepend-icon="lock"
                             name="password"
                             label="Password"
@@ -129,14 +134,14 @@
                           ></v-text-field>
                         </v-form>
                       </v-card-text>
-                      <v-toolbar flat class="white--text" color="white"></v-toolbar>
+                      <v-toolbar flat class="white--text" color="rgb(255,255,255,0)"></v-toolbar>
                       <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn
                           round
                           depressed
                           class="white--text"
-                          color="#907A55"
+                          color="rgb(84, 110, 122, 0.7)"
                           :disabled="!loginIsValid"
                           v-on:click="login" 
                           
