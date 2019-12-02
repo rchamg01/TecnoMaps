@@ -36,7 +36,7 @@
           v-text="header.text"
         />
       </template>
-      <template v-slot:items="users">
+      <template v-slot:items="users" v-slot:scope="props">
         <td>{{ users.item.id }}</td>
         <td>{{ users.item.username }}</td>
         <td>{{ users.item.email }}</td>
@@ -44,21 +44,22 @@
         <td>
           <v-checkbox v-model="users.item.active" readonly="readonly" color="success" hide-details></v-checkbox>
         </td>
-        <td><v-btn flat color="white" @click="showDialog(users.item)"><v-icon color="black">delete_outline</v-icon></v-btn></td>
+        <td>
+          <v-btn flat color="white" @click="showDialog(users.item)">
+            <v-icon color="black">delete_outline</v-icon>
+          </v-btn>
+        </td>
         <v-dialog light v-model="dialog" width="300">
-                    <v-card>
-                      <v-card-title class="headline blue-grey darken-1 white--text">Delete</v-card-title>
-                      <v-card-text>
-                        Are you sure you want to delete {{
-                        users.item.username}}?
-                      </v-card-text>
-                      <v-card-actions>
-                        <v-btn color="grey" outline depressed @click="dialog = false">Cancel</v-btn>
-                        <v-spacer></v-spacer>
-                        <v-btn color="red" outline depressed @click="deleteUser()">DELETE</v-btn>
-                      </v-card-actions>
-                    </v-card>
-                  </v-dialog>
+          <v-card>
+            <v-card-title class="headline blue-grey darken-1 white--text">Delete</v-card-title>
+            <v-card-text>Are you sure you want to delete this user?</v-card-text>
+            <v-card-actions>
+              <v-btn color="grey" outline depressed @click="dialog = false">Cancel</v-btn>
+              <v-spacer></v-spacer>
+              <v-btn color="red" outline depressed @click="deleteUser()">DELETE</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </template>
     </v-data-table>
   </v-app>
@@ -71,7 +72,7 @@ export default {
       snackbarError: false,
       snackbarSuccess: false,
       snackbarSuccessDeleted: false,
-      dialogId:"",
+      dialogId: "",
       headers: [
         {
           text: "ID",
@@ -107,6 +108,7 @@ export default {
     showDialog(user) {
       this.dialog = true;
       this.dialogId = user.id;
+      console.log(this.dialogId);
     },
     requestUsers() {
       var data = this.$store.getters.getUser;
@@ -121,6 +123,18 @@ export default {
         });
     },
     deleteUser() {
+      var data = {
+        id: this.dialogId
+      };
+      this.$store
+        .dispatch("deleteUser", data)
+        .then(() => {
+          this.snackbarSuccessDeleted = true;
+          this.requestUsers();
+        })
+        .catch(err => {
+          this.snackbarError = true;
+        });
     }
   }
 };
