@@ -6,11 +6,11 @@
       </v-toolbar>
       <v-snackbar v-model="snackbarSuccess" absolute top right color="success">
         <span>Registration successful!</span>
-        <v-icon dark>mdi-checkbox-marked-circle</v-icon>
+        <v-icon dark>check_circle_outline</v-icon>
       </v-snackbar>
       <v-snackbar v-model="snackbarError" absolute top right color="error">
         <span>An error ocurred</span>
-        <v-icon dark>mdi-close</v-icon>
+        <v-icon dark>close</v-icon>
       </v-snackbar>
 
       <v-form ref="form" @submit.prevent="submit">

@@ -50,6 +50,7 @@
                             v-model="email"
                             :rules="rules.email"
                             hint="Required field"
+                            v-on:keyup.enter="register"
                             clearable
                             required
                           ></v-text-field>
@@ -61,17 +62,22 @@
                             v-model="signName"
                             :rules="rules.signName"
                             hint="Required field"
+                            v-on:keyup.enter="register"
                             clearable
                             required
                           ></v-text-field>
                           <v-text-field
                             prepend-icon="lock"
                             name="password"
-                            label="Password"
-                            type="password"
+                            label="Password"                           
                             v-model="signPass"
                             :rules="rules.signPass"
+                            :append-icon="showSign ? 'visibility' : 'visibility_off'"
+                            :type="showSign ? 'text' : 'password'"
+                            @click:append="showSign = !showSign"
                             hint="Required field"
+                            v-on:keyup.enter="register"
+                            counter
                             clearable
                             required
                           ></v-text-field>
@@ -86,6 +92,7 @@
                           color="#907A55"
                           @click="register"
                           :disabled="!signIsValid"
+                          
                         >Sign up</v-btn>
                       </v-card-actions>
                     </v-card>
@@ -103,18 +110,22 @@
                             v-model="loginName"
                             :rules="rules.loginName"
                             hint="Required field"
+                            v-on:keyup.enter="login"
                             required
                           ></v-text-field>
                           <v-text-field
                             prepend-icon="lock"
                             name="password"
                             label="Password"
-                            type="password"
                             v-model="loginPass"
                             :rules="rules.loginPass"
+                            :append-icon="showLogin ? 'visibility' : 'visibility_off'"
+                            :type="showLogin ? 'text' : 'password'"
+                            @click:append="showLogin = !showLogin"
                             hint="Required field"
                             clearable
                             required
+                            v-on:keyup.enter="login"
                           ></v-text-field>
                         </v-form>
                       </v-card-text>
@@ -127,8 +138,9 @@
                           class="white--text"
                           color="#907A55"
                           :disabled="!loginIsValid"
-                          v-on:click="login"
-                        >Login</v-btn>
+                          v-on:click="login" 
+                          
+                        > Login</v-btn>
                       </v-card-actions>
                     </v-card>
                   </v-tab-item>
@@ -175,9 +187,11 @@ export default {
         loginName: [val => (val || "").length > 0 || "This field is required"],
         loginPass: [val => (val || "").length > 0 || "This field is required"],
         signName: [val => (val || "").length > 0 || "This field is required"],
-        signPass: [val => (val || "").length > 0 || "This field is required"],
+        signPass: [val => (val || "").length > 0 || "This field is required", val => (val || "").length >= 8 || 'Min 8 characters'],
         email: [val => (val || "").length > 0 || "This field is required"]
-      }
+      },
+      showSign: false,
+      showLogin: false
     };
   },
   computed: {

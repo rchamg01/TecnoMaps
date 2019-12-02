@@ -15,20 +15,20 @@
     </v-card>
 
     <v-snackbar v-model="snackbarSuccess" absolute top right color="success">
-      <span>Saved successfully!</span>
-      <v-icon dark>mdi-checkbox-marked-circle</v-icon>
+      <span>Layer saved successfully!</span>
+      <v-icon dark>check_circle_outline</v-icon>
     </v-snackbar>
     <v-snackbar v-model="snackbarSuccessDeleted" absolute top right color="success">
-      <span>Deleted successfully!</span>
-      <v-icon dark>mdi-checkbox-marked-circle</v-icon>
+      <span>Layer deleted successfully!</span>
+      <v-icon dark>check_circle_outline</v-icon>
     </v-snackbar>
     <v-snackbar v-model="snackbarError" absolute top right color="error">
       <span>An error ocurred</span>
-      <v-icon dark>mdi-close</v-icon>
+      <v-icon dark>close</v-icon>
     </v-snackbar>
     <v-snackbar v-model="snackbarEmpty" absolute top right color="error">
       <span>The layer name is empty!</span>
-      <v-icon dark>mdi-close</v-icon>
+      <v-icon dark>close</v-icon>
     </v-snackbar>
 
     <v-list>
@@ -177,7 +177,6 @@ export default {
         layerName: [val => (val || "").length > 0 || "This field is required"]
       },
       dialog: false,
-      conditions: false,
       snackbarError: false,
       snackbarEmpty: false,
       snackbarSuccess: false,
