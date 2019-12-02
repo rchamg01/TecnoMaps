@@ -40,7 +40,8 @@ User.init(
     email: Sequelize.STRING,
     password: Sequelize.STRING,
     username: Sequelize.STRING,
-    active: Sequelize.INTEGER
+    active: Sequelize.INTEGER,
+    deleted: Sequelize.INTEGER
   },
   { sequelize, modelName: "user" }
 );
@@ -167,7 +168,7 @@ app.post("/login", function(req, res) {
         req.body.username +
         "' AND password = '" +
         req.body.password +
-        "' ) LIMIT 1",
+        "' AND deleted = '0') LIMIT 1",
       { type: sequelize.QueryTypes.SELECT }
     )
     .then(users => {
@@ -309,7 +310,9 @@ app.post("/deleteLayer", function(req, res) {
 
 app.get("/getUsers", function(req, res) {
   sequelize
-    .query("SELECT * FROM users", { type: sequelize.QueryTypes.SELECT })
+    .query("SELECT * FROM users WHERE deleted = '0'", {
+      type: sequelize.QueryTypes.SELECT
+    })
     .then(users => {
       res.status(200).send({ users: users });
     })
@@ -327,6 +330,21 @@ app.post("/getUser_Type", function(req, res) {
     })
     .then(users => {
       res.status(200).send({ user_type: users[0] });
+    })
+    .catch(err => {
+      console.log(err);
+      return res.status(500).send("There was a problem on the server.");
+    });
+});
+
+app.post("/deleteUser", function(req, res) {
+  var id = req.body.id;
+  sequelize
+    .query("UPDATE users SET deleted = 1  WHERE (id = " + id + ")", {
+      type: sequelize.QueryTypes.UPDATE
+    })
+    .then(users => {
+      res.status(200).send({ users: users });
     })
     .catch(err => {
       console.log(err);
