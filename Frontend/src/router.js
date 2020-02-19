@@ -4,6 +4,7 @@ import Login from "@/views/Login";
 import AddLayer from "@/views/AddLayer";
 import EditLayer from "@/views/EditLayer";
 import Users from "@/views/Users";
+import UserProfile from "@/views/UserProfile";
 import store from "./store.js";
 const Principal = () => import("@/views/Principal");
 const Map = () => import("./views/Map.vue");
@@ -41,6 +42,11 @@ let router = new Router({
           path: "/users",
           name: "Users",
           component: Users
+        },
+        {
+          path: "/userprofile",
+          name: "UserProfile",
+          component: UserProfile
         }
       ]
     }
