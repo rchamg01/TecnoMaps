@@ -27,8 +27,10 @@
             </v-list-tile-avatar>
 
             <v-list-tile-content>
-              <v-list-tile-title>{{username}}</v-list-tile-title>
-              <v-list-tile-sub-title>{{this.$store.getters.getUser_type.type_name}}</v-list-tile-sub-title>
+              <v-list-tile-title>{{ username }}</v-list-tile-title>
+              <v-list-tile-sub-title>{{
+                this.$store.getters.getUser_type.type_name
+              }}</v-list-tile-sub-title>
             </v-list-tile-content>
 
             <v-list-tile-action>
@@ -67,7 +69,11 @@
     </v-content>
 
     <v-footer dark height="50" app="app">
-      <v-card flat tile class="blue-grey darken-3 white--text text-xs-center flex">
+      <v-card
+        flat
+        tile
+        class="blue-grey darken-3 white--text text-xs-center flex"
+      >
         <v-card-text>2019 Tecnomaps.</v-card-text>
       </v-card>
     </v-footer>
@@ -96,6 +102,11 @@ export default {
           link: "/editLayer",
           title: "Gestor de capas",
           icon: "create"
+        },
+        {
+          link: "/userProfile",
+          title: "Mi perfil",
+          icon: "account_circle"
         }
       ],
       mini: true,
@@ -108,11 +119,9 @@ export default {
       return this.$store.getters.getUser.username;
     }
   },
-
   mounted() {
     this.requestUser_type();
   },
-
   methods: {
     logout: function() {
       this.$store.dispatch("logout", this.$store.getters.getUser).then(() => {
