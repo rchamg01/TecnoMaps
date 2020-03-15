@@ -36,7 +36,7 @@
           v-text="header.text"
         />
       </template>
-      <template v-slot:items="users" v-slot:scope="props">
+      <template v-slot:items="users">
         <td>{{ users.item.id }}</td>
         <td>{{ users.item.username }}</td>
         <td>{{ users.item.email }}</td>
@@ -44,8 +44,8 @@
         <td>
           <v-checkbox v-model="users.item.active" readonly="readonly" color="success" hide-details></v-checkbox>
         </td>
-        <td>
-          <v-btn flat color="white" @click="showDialog(users.item)">
+        <td width="30">
+          <v-btn icon depressed @click="showDialog(users.item)">
             <v-icon color="black">delete_outline</v-icon>
           </v-btn>
         </td>
@@ -93,6 +93,10 @@ export default {
         {
           text: "Active",
           value: "active"
+        },
+        {
+          text: "Delete",
+          value: "delete"
         }
       ],
       users: [],
@@ -108,7 +112,6 @@ export default {
     showDialog(user) {
       this.dialog = true;
       this.dialogId = user.id;
-      console.log(this.dialogId);
     },
     requestUsers() {
       var data = this.$store.getters.getUser;
@@ -116,7 +119,6 @@ export default {
         .dispatch("getUsers")
         .then(() => {
           this.users = this.$store.getters.getUsers;
-          //console.log(this.users);
         })
         .catch(err => {
           this.snackbarError = true;

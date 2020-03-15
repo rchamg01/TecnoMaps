@@ -16,13 +16,16 @@
               <v-card flat>
                 <v-card-title>
                   <div class="display-1 font-weight-bold mb-0">
-                    #nombre# ·
-                    <font class="font-weight-light" color="grey">#username#</font>
+                    {{ this.$store.getters.getUser.firstname }} {{ this.$store.getters.getUser.lastname}} ·
+                    <font
+                      class="font-weight-light"
+                      color="grey"
+                    >{{ this.$store.getters.getUser.username }}</font>
                   </div>
                 </v-card-title>
                 <v-card-text>
-                  <p>Tipo: #tipousuario#</p>
-                  <p>e-mail: #email#</p>
+                  <p>Tipo: {{ this.$store.getters.getUser_type.type_name }}</p>
+                  <p>E-mail: {{ this.$store.getters.getUser.email }}</p>
                 </v-card-text>
               </v-card>
             </v-flex>

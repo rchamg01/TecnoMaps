@@ -40,6 +40,8 @@ User.init(
     email: Sequelize.STRING,
     password: Sequelize.STRING,
     username: Sequelize.STRING,
+    firstname: Sequelize.STRING,
+    lastname: Sequelize.STRING,
     active: Sequelize.INTEGER,
     deleted: Sequelize.INTEGER
   },
@@ -93,6 +95,8 @@ http
 app.post("/register", function(req, res) {
   var user = req.body.username;
   var pass = req.body.password;
+  var firstname = req.body.firstname;
+  var lastname = req.body.lastname;
   var mail = req.body.email;
 
   sequelize
@@ -111,6 +115,8 @@ app.post("/register", function(req, res) {
             username: user,
             password: pass,
             email: mail,
+            firstname: firstname,
+            lastname: lastname,
             active: 1
           })
             .then(() => {

@@ -17,7 +17,7 @@
           <v-container grid-list-md text-xs-center>
             <v-layout row justify-space-between fill-height>
               <v-flex xs6>
-                <v-carousel cycle height="335" hide-delimiters>
+                <v-carousel cycle height="410" hide-delimiters>
                   <v-carousel-item
                     v-for="(slide, i) in slides"
                     :key="i"
@@ -33,7 +33,13 @@
                 </v-carousel>
               </v-flex>
               <v-flex xs6>
-                <v-tabs v-model="model" centered color="rgb(84, 110, 122,0.8)" dark slider-color="blue-grey lighten-4">
+                <v-tabs
+                  v-model="model"
+                  centered
+                  color="rgb(84, 110, 122,0.8)"
+                  dark
+                  slider-color="blue-grey lighten-4"
+                >
                   <v-tab ripple>SIGN UP</v-tab>
                   <v-tab ripple>LOG IN</v-tab>
 
@@ -43,7 +49,7 @@
                       <v-card-text>
                         <v-form>
                           <v-text-field
-                          color="#78909C"
+                            color="#78909C"
                             prepend-icon="alternate_email"
                             name="e-mail"
                             label="E-mail"
@@ -56,7 +62,7 @@
                             required
                           ></v-text-field>
                           <v-text-field
-                          color="#78909C"
+                            color="#78909C"
                             prepend-icon="person"
                             name="signName"
                             label="Username"
@@ -69,10 +75,10 @@
                             required
                           ></v-text-field>
                           <v-text-field
-                          color="#78909C"
+                            color="#78909C"
                             prepend-icon="lock"
                             name="password"
-                            label="Password"                           
+                            label="Password"
                             v-model="signPass"
                             :rules="rules.signPass"
                             :append-icon="showSign ? 'visibility' : 'visibility_off'"
@@ -84,6 +90,38 @@
                             clearable
                             required
                           ></v-text-field>
+                          <v-layout row wrap>
+                            <v-flex xs12 sm6>
+                              <v-text-field
+                                color="#78909C"
+                                prepend-icon="person"
+                                name="firstname"
+                                label="Firstname"
+                                type="text"
+                                v-model="firstname"
+                                :rules="rules.firstname"
+                                hint="Required field"
+                                v-on:keyup.enter="register"
+                                clearable
+                                required
+                              ></v-text-field>
+                            </v-flex>
+                            <v-flex xs12 sm6>
+                              <v-text-field
+                                color="#78909C"
+                                prepend-icon="person"
+                                name="lastname"
+                                label="Lastname"
+                                type="text"
+                                v-model="lastname"
+                                :rules="rules.lastname"
+                                hint="Required field"
+                                v-on:keyup.enter="register"
+                                clearable
+                                required
+                              ></v-text-field>
+                            </v-flex>
+                          </v-layout>
                         </v-form>
                       </v-card-text>
                       <v-card-actions>
@@ -95,18 +133,20 @@
                           color="rgb(84, 110, 122, 0.7)"
                           @click="register"
                           :disabled="!signIsValid"
-                          
                         >Sign up</v-btn>
                       </v-card-actions>
                     </v-card>
                   </v-tab-item>
                   <v-tab-item>
-                    <!--item-->
-                    <v-card  color="rgb(255,255,255,0.7)" flat class="elevation">
+                    <!--LOGIN-->
+                    <v-card color="rgb(255,255,255,0.7)" height="362" flat class="elevation">
                       <v-card-text>
                         <v-form>
+                          <br />
+                          <br />
+                          <br />
                           <v-text-field
-                          color="#78909C"
+                            color="#78909C"
                             prepend-icon="person"
                             name="username"
                             label="Username"
@@ -118,7 +158,7 @@
                             required
                           ></v-text-field>
                           <v-text-field
-                          color="#78909C"
+                            color="#78909C"
                             prepend-icon="lock"
                             name="password"
                             label="Password"
@@ -143,9 +183,8 @@
                           class="white--text"
                           color="rgb(84, 110, 122, 0.7)"
                           :disabled="!loginIsValid"
-                          v-on:click="login" 
-                          
-                        > Login</v-btn>
+                          v-on:click="login"
+                        >Login</v-btn>
                       </v-card-actions>
                     </v-card>
                   </v-tab-item>
@@ -172,6 +211,8 @@ export default {
       email: null,
       signName: null,
       signPass: null,
+      firstname: null,
+      lastname: null,
       alert: false,
       alertContent: "",
       slides: [
@@ -192,7 +233,12 @@ export default {
         loginName: [val => (val || "").length > 0 || "This field is required"],
         loginPass: [val => (val || "").length > 0 || "This field is required"],
         signName: [val => (val || "").length > 0 || "This field is required"],
-        signPass: [val => (val || "").length > 0 || "This field is required", val => (val || "").length >= 8 || 'Min 8 characters'],
+        firstname: [val => (val || "").length > 0 || "This field is required"],
+        lastname: [val => (val || "").length > 0 || "This field is required"],
+        signPass: [
+          val => (val || "").length > 0 || "This field is required",
+          val => (val || "").length >= 8 || "Min 8 characters"
+        ],
         email: [val => (val || "").length > 0 || "This field is required"]
       },
       showSign: false,
@@ -240,6 +286,10 @@ export default {
       if (
         this.signName == null ||
         this.signName == "" ||
+        this.firstname == null ||
+        this.firstname == "" ||
+        this.lastname == null ||
+        this.lastname == "" ||
         this.signPass == null ||
         this.signPass == "" ||
         this.email == null ||
@@ -251,7 +301,9 @@ export default {
         let data = {
           username: this.signName,
           email: this.email,
-          password: this.signPass
+          password: this.signPass,
+          firstname: this.firstname,
+          lastname: this.lastname
         };
         this.$store
           .dispatch("register", data)
