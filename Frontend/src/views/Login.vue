@@ -218,13 +218,13 @@ export default {
       slides: [
         {
           position: "center",
-          text: "Visualiza capas",
+          text: "Visualize Layers",
           src: "https://i.imgur.com/Z7wQwW9.jpg",
           class: "display-1 white--text"
         },
         {
           position: "center",
-          text: "Visualiza capas 2",
+          text: "Manage your layers",
           src: "https://i.imgur.com/Z7wQwW9.jpg",
           class: "display-1 white--text"
         }
