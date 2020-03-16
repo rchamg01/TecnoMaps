@@ -24,7 +24,7 @@
                   </div>
                 </v-card-title>
                 <v-card-text>
-                  <p>Tipo: {{ this.$store.getters.getUser_type.type_name }}</p>
+                  <p>Type: {{ this.$store.getters.getUser_type.type_name }}</p>
                   <p>E-mail: {{ this.$store.getters.getUser.email }}</p>
                 </v-card-text>
               </v-card>

@@ -88,22 +88,22 @@ export default {
       items: [
         {
           link: "/principal/",
-          title: "Inicio",
+          title: "Home",
           icon: "home"
         },
         {
           link: "/userProfile",
-          title: "Mi perfil",
+          title: "Profile",
           icon: "account_circle"
         },
         {
           link: "/addLayer",
-          title: "Añadir capa",
+          title: "Add Layer",
           icon: "library_add"
         },
         {
           link: "/editLayer",
-          title: "Gestor de capas",
+          title: "Layer Management",
           icon: "create"
         }
       ],
@@ -138,7 +138,7 @@ export default {
           if (this.$store.getters.getUser_type.type_name == "admin") {
             this.items.push({
               link: "/users",
-              title: "Gestor de usuarios",
+              title: "User Management",
               icon: "supervised_user_circle"
             });
           }
