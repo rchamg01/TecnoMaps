@@ -131,7 +131,7 @@ export default {
       }
       this.$store
         .dispatch("getUser_type", {
-          data: this.$store.getters.getUser
+          data: this.$store.getters.getUser.idType
         })
         .then(() => {
           if (this.$store.getters.getUser_type.type_name == "admin") {
