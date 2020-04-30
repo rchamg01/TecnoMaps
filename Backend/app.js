@@ -42,6 +42,12 @@ User.init(
     username: Sequelize.STRING,
     firstname: Sequelize.STRING,
     lastname: Sequelize.STRING,
+    organization: Sequelize.STRING,
+    address: Sequelize.STRING,
+    city: Sequelize.STRING,
+    phone_number: Sequelize.INTEGER,
+    profile_photo: Sequelize.STRING,
+    privacity: Sequelize.STRING,
     active: Sequelize.INTEGER,
     deleted: Sequelize.INTEGER
   },
