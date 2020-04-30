@@ -42,8 +42,15 @@ User.init(
     username: Sequelize.STRING,
     firstname: Sequelize.STRING,
     lastname: Sequelize.STRING,
+    organization: Sequelize.STRING,
+    address: Sequelize.STRING,
+    city: Sequelize.STRING,
+    phone_number: Sequelize.INTEGER,
+    profile_photo: Sequelize.STRING,
+    privacity: Sequelize.STRING,
     active: Sequelize.INTEGER,
-    deleted: Sequelize.INTEGER
+    deleted: Sequelize.INTEGER,
+    idType: Sequelize.INTEGER
   },
   { sequelize, modelName: "user" }
 );
@@ -51,8 +58,7 @@ User.init(
 class User_type extends Sequelize.Model {}
 User_type.init(
   {
-    type_name: Sequelize.STRING,
-    idUser: Sequelize.INTEGER
+    type_name: Sequelize.STRING
   },
   { sequelize, modelName: "user_type" }
 );
@@ -117,7 +123,8 @@ app.post("/register", function(req, res) {
             email: mail,
             firstname: firstname,
             lastname: lastname,
-            active: 1
+            active: 1,
+            idType: 2
           })
             .then(() => {
               sequelize
@@ -131,12 +138,6 @@ app.post("/register", function(req, res) {
                   });
                   sequelize
                     .sync()
-                    .then(() =>
-                      User_type.create({
-                        type_name: "standard",
-                        idUser: users[0].id
-                      })
-                    )
                     .then(() => {
                       res
                         .status(200)
@@ -329,13 +330,13 @@ app.get("/getUsers", function(req, res) {
 });
 
 app.post("/getUser_Type", function(req, res) {
-  var idUser = req.body.data.id;
+  var idType = req.body.data;
   sequelize
-    .query("SELECT * FROM user_types WHERE (idUser = " + idUser + ")", {
+    .query("SELECT * FROM user_types WHERE (id = " + idType + ")", {
       type: sequelize.QueryTypes.SELECT
     })
-    .then(users => {
-      res.status(200).send({ user_type: users[0] });
+    .then(type => {
+      res.status(200).send({ user_type: type[0] });
     })
     .catch(err => {
       console.log(err);

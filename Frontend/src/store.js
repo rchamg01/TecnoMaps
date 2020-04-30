@@ -245,12 +245,12 @@ export default new Vuex.Store({
           });
       });
     },
-    getUser_type({ commit }, user) {
+    getUser_type({ commit }, type) {
       return new Promise((resolve, reject) => {
         commit("user_type_request");
         axios({
           url: "http://localhost:3000/getUser_Type",
-          data: user,
+          data: type,
           method: "POST"
         })
           .then(resp => {
