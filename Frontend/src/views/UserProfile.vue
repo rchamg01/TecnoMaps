@@ -46,8 +46,21 @@
         </v-card-text>
         <v-card-actions>
           <v-layout row justify-space-between>
-            <v-btn color="red" outline depressed>Delete</v-btn>
-
+            <v-btn color="red" outline depressed @click="showDialog(user)">Delete</v-btn>
+            <v-dialog v-model="dialog" width="300">
+              <v-card>
+                <v-card-title class="headline blue-grey darken-1 white--text">Delete</v-card-title>
+                <v-card-text>
+                  Are you sure you want to delete this
+                  layer?
+                </v-card-text>
+                <v-card-actions>
+                  <v-btn color="grey" outline depressed @click="dialog = false">Cancel</v-btn>
+                  <v-spacer></v-spacer>
+                  <v-btn color="red" outline depressed @click="deleteLayer()">DELETE</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
             <v-btn text color="primary" depressed outline>Save</v-btn>
           </v-layout>
         </v-card-actions>
@@ -59,8 +72,15 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      dialog: false
+    };
   },
-  methods: {}
+  methods: {
+    showDialog(user) {
+      this.dialog = true;
+      this.dialogId = user.id;
+    }
+  }
 };
 </script>
