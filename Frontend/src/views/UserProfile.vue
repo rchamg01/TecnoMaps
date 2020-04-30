@@ -1,5 +1,9 @@
 <template>
   <v-app>
+    <v-snackbar v-model="snackbarError" absolute top right color="error">
+      <span>An error ocurred</span>
+      <v-icon dark>close</v-icon>
+    </v-snackbar>
     <v-container fluid>
       <v-card flat>
         <v-card-text>
@@ -46,18 +50,18 @@
         </v-card-text>
         <v-card-actions>
           <v-layout row justify-space-between>
-            <v-btn color="red" outline depressed @click="showDialog(user)">Delete</v-btn>
+            <v-btn color="red" outline depressed @click="showDialog()">Delete</v-btn>
             <v-dialog v-model="dialog" width="300">
               <v-card>
                 <v-card-title class="headline blue-grey darken-1 white--text">Delete</v-card-title>
                 <v-card-text>
-                  Are you sure you want to delete this
-                  layer?
+                  Are you sure you want to delete your
+                  user?
                 </v-card-text>
                 <v-card-actions>
                   <v-btn color="grey" outline depressed @click="dialog = false">Cancel</v-btn>
                   <v-spacer></v-spacer>
-                  <v-btn color="red" outline depressed @click="deleteLayer()">DELETE</v-btn>
+                  <v-btn color="red" outline depressed @click="deleteUser()">DELETE</v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -73,13 +77,29 @@
 export default {
   data() {
     return {
-      dialog: false
+      dialog: false,
+      snackbarError: false
     };
   },
   methods: {
-    showDialog(user) {
+    showDialog() {
       this.dialog = true;
-      this.dialogId = user.id;
+    },
+    deleteUser() {
+      var data = {
+        id: this.$store.getters.getUser.id
+      };
+      this.$store
+        .dispatch("logout", this.$store.getters.getUser)
+        .then(() => {
+          this.$router.push("/");
+          this.$store.dispatch("deleteUser", data).catch(err => {
+            this.snackbarError = true;
+          });
+        })
+        .catch(err => {
+          this.snackbarError = true;
+        });
     }
   }
 };

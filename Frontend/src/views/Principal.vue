@@ -83,7 +83,6 @@ export default {
   name: "Principal",
   data() {
     return {
-      nombre: "",
       drawer: true,
       items: [
         {
