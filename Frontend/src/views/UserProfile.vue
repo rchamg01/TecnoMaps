@@ -9,12 +9,27 @@
         <v-card-text>
           <v-layout row>
             <v-flex shrink pa-1>
-              <v-avatar size="170" color="grey lighten-4">
-                <img
-                  src="https://i.pinimg.com/originals/47/1a/1a/471a1ad342659289433e05a611d206f8.png"
-                  alt="avatar"
-                />
-              </v-avatar>
+              <image-input v-model="avatar">
+                <div slot="activator">
+                  <v-avatar size="150px" v-ripple v-if="!avatar" class="grey lighten-3 mb-3">
+                    <span>Click to add avatar</span>
+                  </v-avatar>
+                  <v-avatar size="150px" v-ripple v-else class="mb-3">
+                    <img :src="avatar.imageURL" alt="avatar" />
+                  </v-avatar>
+                </div>
+              </image-input>
+              <v-slide-x-transition>
+                <div v-if="avatar && saved == false">
+                  <v-btn
+                    outline
+                    depressed
+                    color="grey"
+                    @click="uploadImage"
+                    :loading="saving"
+                  >Save Avatar</v-btn>
+                </div>
+              </v-slide-x-transition>
             </v-flex>
             <v-flex grow pa-1>
               <v-card flat>
@@ -34,8 +49,6 @@
               </v-card>
             </v-flex>
           </v-layout>
-
-          <v-btn outline depressed color="grey">Change Avatar</v-btn>
           <v-layout row justify-space-between>
             <v-flex xs3>
               <v-text-field label="First Name"></v-text-field>
@@ -74,14 +87,38 @@
 </template>
 
 <script>
+import ImageInput from "@/components/ImageInput.vue";
+
 export default {
   data() {
     return {
       dialog: false,
-      snackbarError: false
+      snackbarError: false,
+      avatar: null,
+      saving: false,
+      saved: false
     };
   },
+  components: {
+    ImageInput: ImageInput
+  },
+  watch: {
+    avatar: {
+      handler: function() {
+        this.saved = false;
+      },
+      deep: true
+    }
+  },
   methods: {
+    uploadImage() {
+      this.saving = true;
+      setTimeout(() => this.savedAvatar(), 1000);
+    },
+    savedAvatar() {
+      this.saving = false;
+      this.saved = true;
+    },
     showDialog() {
       this.dialog = true;
     },
