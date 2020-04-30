@@ -21,6 +21,7 @@ export default new Vuex.Store({
     status: "",
     layersStatus: "",
     usersStatus: "",
+    userStatus: "",
     user_typeStatus: "",
     token: localStorage.getItem("token") || "",
     user: "",
@@ -45,6 +46,9 @@ export default new Vuex.Store({
     logout(state) {
       state.status = "";
       state.token = "";
+    },
+    update_avatar(state, avatar) {
+      state.avatar = avatar;
     },
     update_layers(state, layers) {
       state.layers = layers;
@@ -81,6 +85,15 @@ export default new Vuex.Store({
     },
     user_type_error(state) {
       state.user_typeStatus = "error";
+    },
+    user_request(state) {
+      state.userStatus = "loading";
+    },
+    user_success(state) {
+      state.userStatus = "success";
+    },
+    user_error(state) {
+      state.userStatus = "error";
     }
   },
   actions: {
@@ -134,7 +147,26 @@ export default new Vuex.Store({
           });
       });
     },
-
+    getUser({ commit }, id) {
+      return new Promise((resolve, reject) => {
+        commit("user_request");
+        axios({
+          url: "http://localhost:3000/getUser",
+          data: id,
+          method: "GET"
+        })
+          .then(resp => {
+            const user = resp.data.user;
+            commit("user_success");
+            commit("update_user", user);
+            resolve(resp);
+          })
+          .catch(err => {
+            commit("user_error");
+            reject(err);
+          });
+      });
+    },
     logout({ commit }, user) {
       return new Promise(resolve => {
         commit("logout");
@@ -281,6 +313,21 @@ export default new Vuex.Store({
           })
           .catch(err => {
             commit("users_error", err);
+            reject(err);
+          });
+      });
+    },
+    saveAvatar({ commit }, avatar) {
+      return new Promise((resolve, reject) => {
+        axios({
+          url: "http://localhost:3000/saveAvatar",
+          data: avatar,
+          method: "POST"
+        })
+          .then(resp => {
+            resolve(resp);
+          })
+          .catch(err => {
             reject(err);
           });
       });

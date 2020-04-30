@@ -329,6 +329,23 @@ app.get("/getUsers", function(req, res) {
     });
 });
 
+app.get("/getUser", function(req, res) {
+  console.log(req.body);
+  var id = req.body.id;
+  sequelize
+    .query("SELECT * FROM users WHERE id = '" + id + "'", {
+      type: sequelize.QueryTypes.SELECT
+    })
+    .then(user => {
+      console.log(user);
+      res.status(200).send({ user: user });
+    })
+    .catch(err => {
+      console.log(err);
+      return res.status(500).send("There was a problem on the server.");
+    });
+});
+
 app.post("/getUser_Type", function(req, res) {
   var idType = req.body.data;
   sequelize
@@ -352,6 +369,25 @@ app.post("/deleteUser", function(req, res) {
     })
     .then(users => {
       res.status(200).send({ users: users });
+    })
+    .catch(err => {
+      console.log(err);
+      return res.status(500).send("There was a problem on the server.");
+    });
+});
+
+app.post("/saveAvatar", function(req, res) {
+  var id = req.body.id;
+  var url = req.body.url;
+  sequelize
+    .query(
+      "UPDATE users SET profile_photo = '" + url + "'  WHERE (id = " + id + ")",
+      {
+        type: sequelize.QueryTypes.UPDATE
+      }
+    )
+    .then(avatar => {
+      res.status(200).send({ avatar: avatar });
     })
     .catch(err => {
       console.log(err);

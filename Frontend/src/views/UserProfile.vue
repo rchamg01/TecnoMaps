@@ -11,11 +11,24 @@
             <v-flex shrink pa-1>
               <image-input v-model="avatar">
                 <div slot="activator">
-                  <v-avatar size="150px" v-ripple v-if="!avatar" class="grey lighten-3 mb-3">
+                  <v-avatar
+                    size="150px"
+                    v-ripple
+                    v-if="!this.$store.getters.getUser.profile_photo && !avatar"
+                    class="grey lighten-3 mb-3"
+                  >
                     <span>Click to add avatar</span>
                   </v-avatar>
-                  <v-avatar size="150px" v-ripple v-else class="mb-3">
+                  <v-avatar size="150px" v-ripple v-else-if="avatar" class="mb-3">
                     <img :src="avatar.imageURL" alt="avatar" />
+                  </v-avatar>
+                  <v-avatar
+                    size="150px"
+                    v-ripple
+                    v-else-if="this.$store.getters.getUser.profile_photo"
+                    class="mb-3"
+                  >
+                    <img :src="this.$store.getters.getUser.profile_photo" alt="avatar" />
                   </v-avatar>
                 </div>
               </image-input>
@@ -113,7 +126,26 @@ export default {
   methods: {
     uploadImage() {
       this.saving = true;
-      setTimeout(() => this.savedAvatar(), 1000);
+      var data = {
+        id: this.$store.getters.getUser.id,
+        url: this.avatar.imageURL
+      };
+      this.savedAvatar();
+      /*this.$store
+        .dispatch("saveAvatar", data)
+        .then(() => {
+          this.$store
+            .dispatch("getUser", this.$store.getters.getUser.id)
+            .then(() => {
+              this.savedAvatar();
+            })
+            .catch(err => {
+              this.snackbarError = true;
+            });
+        })
+        .catch(err => {
+          this.snackbarError = true;
+        });*/
     },
     savedAvatar() {
       this.saving = false;
