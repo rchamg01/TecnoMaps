@@ -63,6 +63,17 @@ User_type.init(
   { sequelize, modelName: "user_type" }
 );
 
+class Actions extends Sequelize.Model {}
+Actions.init(
+  {
+    registered: Sequelize.TIME,
+    lastLogin: Sequelize.TIME,
+    lastLogout: Sequelize.TIME,
+    idUser: Sequelize.INTEGER
+  },
+  { sequelize, modelName: "actions" }
+);
+
 class Layer extends Sequelize.Model {}
 Layer.init(
   {
@@ -133,12 +144,29 @@ app.post("/register", function(req, res) {
                   { type: sequelize.QueryTypes.SELECT }
                 )
                 .then(users => {
-                  let token = jwt.sign({ id: users[0].id }, config.secret, {
+                  var id = users[0].id;
+                  let token = jwt.sign({ id: id }, config.secret, {
                     expiresIn: 86400 // expires in 24 hours
                   });
                   sequelize
                     .sync()
                     .then(() => {
+                      Actions.create({
+                        registered: new Date()
+                          .toISOString()
+                          .slice(0, 19)
+                          .replace("T", " "),
+                        lastLogin: new Date()
+                          .toISOString()
+                          .slice(0, 19)
+                          .replace("T", " "),
+                        idUser: id
+                      }).catch(err => {
+                        console.log(err);
+                        return res
+                          .status(500)
+                          .send("There was a problem registering the user.");
+                      });
                       res
                         .status(200)
                         .send({ auth: true, token: token, user: users[0] });
@@ -180,16 +208,32 @@ app.post("/login", function(req, res) {
     )
     .then(users => {
       if (users.length != 0) {
-        sequelize.query(
-          "UPDATE users SET active = 1 WHERE (username = '" +
-            users[0].username +
-            "')",
-          { type: sequelize.QueryTypes.UPDATE }
-        );
-        let token = jwt.sign({ id: users[0].id }, config.secret, {
-          expiresIn: 86400 // expires in 24 hours
-        });
-        res.status(200).send({ auth: true, token: token, user: users[0] });
+        sequelize
+          .query(
+            "UPDATE users SET active = 1 WHERE (username = '" +
+              users[0].username +
+              "')",
+            { type: sequelize.QueryTypes.UPDATE }
+          )
+          .then(() => {
+            var user = users[0];
+            var id = users[0].id;
+            let token = jwt.sign({ id: id }, config.secret, {
+              expiresIn: 86400 // expires in 24 hours
+            });
+            sequelize.query(
+              "UPDATE actions SET lastLogin = '" +
+                new Date()
+                  .toISOString()
+                  .slice(0, 19)
+                  .replace("T", " ") +
+                "' WHERE (idUser = " +
+                id +
+                ")",
+              { type: sequelize.QueryTypes.UPDATE }
+            );
+            res.status(200).send({ auth: true, token: token, user: user });
+          });
       } else {
         return res.status(404).send({ message: "No user found." });
       }
@@ -202,16 +246,22 @@ app.post("/login", function(req, res) {
 
 app.post("/logout", function(req, res) {
   sequelize
-    .query(
-      "UPDATE users SET active = 0 WHERE (username = '" +
-        req.body.username +
-        "')",
-      {
-        type: sequelize.QueryTypes.UPDATE
-      }
-    )
-    .then(layers => {
-      res.status(200).send(true);
+    .query("UPDATE users SET active = 0 WHERE (id = '" + req.body.id + "')", {
+      type: sequelize.QueryTypes.UPDATE
+    })
+    .then(() => {
+      sequelize.query(
+        "UPDATE actions SET lastLogout = '" +
+          new Date()
+            .toISOString()
+            .slice(0, 19)
+            .replace("T", " ") +
+          "' WHERE (idUser = '" +
+          req.body.id +
+          "')",
+        { type: sequelize.QueryTypes.UPDATE }
+      );
+      res.status(200).send({ logout: true });
     });
 });
 
