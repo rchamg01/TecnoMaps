@@ -36,6 +36,7 @@
         </v-layout>
 
         <v-btn outline depressed color="grey">Change Avatar</v-btn>
+
         <v-layout row justify-space-between>
           <v-flex xs4>
             <v-text-field :rules="rules.name" label="First Name"></v-text-field>
@@ -50,6 +51,7 @@
             <v-text-field
               :rules="rules.email"
               label="Email Address"
+              disabled
             ></v-text-field>
           </v-flex>
         </v-layout>
@@ -70,33 +72,84 @@
             ></v-text-field>
           </v-flex>
         </v-layout>
-
-        <v-card-actions>
-          <v-layout row justify-space-between>
-            <v-btn color="red" outline depressed @click="showDialog()"
-              >Delete</v-btn
+        <v-divider></v-divider>
+        <v-layout row justify-space-between>
+          <v-card-title class="title">Password change</v-card-title>
+        </v-layout>
+        <v-layout row>
+          <v-flex xs4>
+            <v-text-field
+              color="#78909C"
+              prepend-icon="lock"
+              name="password"
+              label="Old password"
+              v-model="oldPass"
+              :rules="rules.oldPass"
+              :append-icon="showOldPass ? 'visibility' : 'visibility_off'"
+              :type="showOldPass ? 'text' : 'password'"
+              @click:append="showOldPass = !showOldPass"
+              hint="Required field"
+              counter
+              clearable
+              required
+            ></v-text-field>
+          </v-flex>
+          <v-flex xs4>
+            <v-text-field
+              color="#78909C"
+              prepend-icon="lock"
+              name="password"
+              label="New password"
+              v-model="newPass"
+              :rules="rules.newPass"
+              :append-icon="showNewPass ? 'visibility' : 'visibility_off'"
+              :type="showNewPass ? 'text' : 'password'"
+              @click:append="showNewPass = !showNewPass"
+              hint="Required field"
+              counter
+              clearable
+              required
+            ></v-text-field>
+          </v-flex>
+          <v-flex xs4>
+            <v-btn text color="primary" depressed outline
+              >Save new password</v-btn
             >
-            <v-dialog v-model="dialog" width="300">
-              <v-card>
-                <v-card-title class="headline blue-grey darken-1 white--text"
-                  >Delete</v-card-title
-                >
-                <v-card-text>
-                  Are you sure you want to delete your user?
-                </v-card-text>
-                <v-card-actions>
-                  <v-btn color="grey" outline depressed @click="dialog = false"
-                    >Cancel</v-btn
+          </v-flex>
+        </v-layout>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-container>
+            <v-layout row justify-space-between>
+              <v-btn color="red" outline depressed @click="showDialog()"
+                >Delete</v-btn
+              >
+              <v-dialog v-model="dialog" width="300">
+                <v-card>
+                  <v-card-title class="headline blue-grey darken-1 white--text"
+                    >Delete</v-card-title
                   >
-                  <v-spacer></v-spacer>
-                  <v-btn color="red" outline depressed @click="deleteUser()"
-                    >DELETE</v-btn
-                  >
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-            <v-btn text color="primary" depressed outline>Save</v-btn>
-          </v-layout>
+                  <v-card-text>
+                    Are you sure you want to delete your user?
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-btn
+                      color="grey"
+                      outline
+                      depressed
+                      @click="dialog = false"
+                      >Cancel</v-btn
+                    >
+                    <v-spacer></v-spacer>
+                    <v-btn color="red" outline depressed @click="deleteUser()"
+                      >DELETE</v-btn
+                    >
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+              <v-btn text color="primary" depressed outline>Save</v-btn>
+            </v-layout>
+          </v-container>
         </v-card-actions>
       </v-container>
     </v-card>
@@ -118,7 +171,17 @@ export default {
         name: [(val) => (val || "").length > 0 || "This field is required"],
         lastName: [(val) => (val || "").length > 0 || "This field is required"],
         email: [(val) => (val || "").length > 0 || "This field is required"],
+        oldPass: [
+          (val) => (val || "").length > 0 || "This field is required",
+          (val) => (val || "").length >= 8 || "Min 8 characters",
+        ],
+        newPass: [
+          (val) => (val || "").length > 0 || "This field is required",
+          (val) => (val || "").length >= 8 || "Min 8 characters",
+        ],
       },
+      showOldPass: false,
+      showNewPass: false,
       dialog: false,
       snackbarError: false,
     };
