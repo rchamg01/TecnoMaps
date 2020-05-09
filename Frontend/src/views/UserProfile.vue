@@ -4,7 +4,14 @@
       <span>An error ocurred</span>
       <v-icon dark>close</v-icon>
     </v-snackbar>
-
+    <v-snackbar v-model="snackbarSuccess" absolute top right color="success">
+      <span>User saved successfully!</span>
+      <v-icon dark>check_circle_outline</v-icon>
+    </v-snackbar>
+    <v-snackbar v-model="snackbarPass" absolute top right color="error">
+      <span>Wrong password!</span>
+      <v-icon dark>close</v-icon>
+    </v-snackbar>
     <v-card flat>
       <v-container grid-list-xl>
         <v-layout row>
@@ -22,14 +29,18 @@
                 <div class="display-1 font-weight-bold mb-0">
                   {{ this.$store.getters.getUser.firstname }}
                   {{ this.$store.getters.getUser.lastname }} ·
-                  <font class="font-weight-light" color="grey">{{
+                  <font
+                    class="font-weight-light"
+                    color="grey"
+                  >
+                    {{
                     this.$store.getters.getUser.username
-                  }}</font>
+                    }}
+                  </font>
                 </div>
               </v-card-title>
               <v-card-text>
-                <p>Type: {{ this.$store.getters.getUser_type.type_name }}</p>
-                <p>E-mail: {{ this.$store.getters.getUser.email }}</p>
+                <p>User type: {{ this.$store.getters.getUser_type.type_name.charAt(0).toUpperCase() + this.$store.getters.getUser_type.type_name.slice(1) }}</p>
               </v-card-text>
             </v-card>
           </v-flex>
@@ -39,37 +50,29 @@
 
         <v-layout row justify-space-between>
           <v-flex xs4>
-            <v-text-field :rules="rules.name" label="First Name"></v-text-field>
+            <v-text-field v-model="form.name" :rules="rules.name" label="First Name"></v-text-field>
           </v-flex>
           <v-flex xs4>
-            <v-text-field
-              :rules="rules.lastName"
-              label="Last Name"
-            ></v-text-field>
+            <v-text-field v-model="form.lastName" :rules="rules.lastName" label="Last Name"></v-text-field>
           </v-flex>
           <v-flex xs4>
-            <v-text-field
-              :rules="rules.email"
-              label="Email Address"
-              disabled
-            ></v-text-field>
+            <v-text-field v-model="form.email" :rules="rules.email" label="Email Address" disabled></v-text-field>
           </v-flex>
         </v-layout>
         <v-layout row justify-space-between>
           <v-flex xs4>
-            <v-text-field
-              label="Phone number"
-              hint="Optional field"
-            ></v-text-field>
+            <v-text-field v-model="form.phone_number" label="Phone number" hint="Optional field"></v-text-field>
           </v-flex>
           <v-flex xs4>
-            <v-text-field label="Address" hint="Optional field"></v-text-field>
+            <v-text-field v-model="form.address" label="Address" hint="Optional field"></v-text-field>
           </v-flex>
           <v-flex xs4>
-            <v-text-field
-              label="Organization"
-              hint="Optional field"
-            ></v-text-field>
+            <v-text-field v-model="form.city" label="City" hint="Optional field"></v-text-field>
+          </v-flex>
+        </v-layout>
+        <v-layout row>
+          <v-flex xs4>
+            <v-text-field v-model="form.organization" label="Organization" hint="Optional field"></v-text-field>
           </v-flex>
         </v-layout>
         <v-divider></v-divider>
@@ -111,43 +114,24 @@
               required
             ></v-text-field>
           </v-flex>
-          <v-flex xs4>
-            <v-btn text color="primary" depressed outline
-              >Save new password</v-btn
-            >
-          </v-flex>
         </v-layout>
         <v-divider></v-divider>
         <v-card-actions>
           <v-container>
             <v-layout row justify-space-between>
-              <v-btn color="red" outline depressed @click="showDialog()"
-                >Delete</v-btn
-              >
+              <v-btn color="red" outline depressed @click="showDialog()">Delete</v-btn>
               <v-dialog v-model="dialog" width="300">
                 <v-card>
-                  <v-card-title class="headline blue-grey darken-1 white--text"
-                    >Delete</v-card-title
-                  >
-                  <v-card-text>
-                    Are you sure you want to delete your user?
-                  </v-card-text>
+                  <v-card-title class="headline blue-grey darken-1 white--text">Delete</v-card-title>
+                  <v-card-text>Are you sure you want to delete your user?</v-card-text>
                   <v-card-actions>
-                    <v-btn
-                      color="grey"
-                      outline
-                      depressed
-                      @click="dialog = false"
-                      >Cancel</v-btn
-                    >
+                    <v-btn color="grey" outline depressed @click="dialog = false">Cancel</v-btn>
                     <v-spacer></v-spacer>
-                    <v-btn color="red" outline depressed @click="deleteUser()"
-                      >DELETE</v-btn
-                    >
+                    <v-btn color="red" outline depressed @click="deleteUser()">DELETE</v-btn>
                   </v-card-actions>
                 </v-card>
               </v-dialog>
-              <v-btn text color="primary" depressed outline>Save</v-btn>
+              <v-btn text color="primary" depressed outline @click="save()">Save</v-btn>
             </v-layout>
           </v-container>
         </v-card-actions>
@@ -159,53 +143,83 @@
 <script>
 export default {
   data() {
-    const defaultForm = Object.freeze({
-      name: "",
-      lastName: "",
-      layerSource: "",
-      email: "",
-    });
-
+    const form = {
+      name: this.$store.getters.getUser.firstname,
+      lastName: this.$store.getters.getUser.lastname,
+      email: this.$store.getters.getUser.email,
+      phone: this.$store.getters.getUser.phone_number
+        ? this.$store.getters.getUser.phone_number
+        : "",
+      address: this.$store.getters.getUser.address
+        ? this.$store.getters.getUser.address
+        : "",
+      city: this.$store.getters.getUser.city
+        ? this.$store.getters.getUser.city
+        : "",
+      organization: this.$store.getters.getUser.organization
+        ? this.$store.getters.getUser.organization
+        : ""
+    };
     return {
       rules: {
-        name: [(val) => (val || "").length > 0 || "This field is required"],
-        lastName: [(val) => (val || "").length > 0 || "This field is required"],
-        email: [(val) => (val || "").length > 0 || "This field is required"],
-        oldPass: [
-          (val) => (val || "").length > 0 || "This field is required",
-          (val) => (val || "").length >= 8 || "Min 8 characters",
-        ],
+        name: [val => (val || "").length > 0 || "This field is required"],
+        lastName: [val => (val || "").length > 0 || "This field is required"],
+        email: [val => (val || "").length > 0 || "This field is required"],
+        oldPass: [val => (val || "").length > 0 || "This field is required"],
         newPass: [
-          (val) => (val || "").length > 0 || "This field is required",
-          (val) => (val || "").length >= 8 || "Min 8 characters",
-        ],
+          val => (val || "").length > 0 || "This field is required",
+          val => (val || "").length >= 8 || "Min 8 characters"
+        ]
       },
+      oldPass: "",
+      newPass: "",
+      form,
       showOldPass: false,
       showNewPass: false,
       dialog: false,
       snackbarError: false,
+      snackbarSuccess: false,
+      snackbarPass: false
     };
   },
   methods: {
     showDialog() {
       this.dialog = true;
     },
+    save() {
+      if (
+        (this.oldPass != "" &&
+          this.oldPass == this.$store.getters.getUser.password) ||
+        this.oldPass == ""
+      )
+        /*this.$store
+          .dispatch("updateUser", form)
+          .then(() => {
+            this.snackbarSuccess = true;
+          })
+          .catch(err => {
+            this.snackbarError = true;
+          });*/ console.log(
+          "call"
+        );
+      else this.snackbarPass = true;
+    },
     deleteUser() {
       var data = {
-        id: this.$store.getters.getUser.id,
+        id: this.$store.getters.getUser.id
       };
       this.$store
         .dispatch("logout", this.$store.getters.getUser)
         .then(() => {
           this.$router.push("/");
-          this.$store.dispatch("deleteUser", data).catch((err) => {
+          this.$store.dispatch("deleteUser", data).catch(err => {
             this.snackbarError = true;
           });
         })
-        .catch((err) => {
+        .catch(err => {
           this.snackbarError = true;
         });
-    },
-  },
+    }
+  }
 };
 </script>

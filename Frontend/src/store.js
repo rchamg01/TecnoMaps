@@ -81,6 +81,15 @@ export default new Vuex.Store({
     },
     user_type_error(state) {
       state.user_typeStatus = "error";
+    },
+    user_request(state) {
+      state.userStatus = "loading";
+    },
+    user_success(state) {
+      state.userStatus = "success";
+    },
+    user_error(state) {
+      state.userStatus = "error";
     }
   },
   actions: {
@@ -261,6 +270,26 @@ export default new Vuex.Store({
           })
           .catch(err => {
             commit("user_type_error");
+            reject(err);
+          });
+      });
+    },
+    updateUser({ commit }, user) {
+      return new Promise((resolve, reject) => {
+        commit("users_request");
+        axios({
+          url: "http://localhost:3000/updateUser",
+          data: user,
+          method: "POST"
+        })
+          .then(resp => {
+            const user = resp.data.user;
+            commit("user_success");
+            commit("update_users", user);
+            resolve(resp);
+          })
+          .catch(err => {
+            commit("user_error", err);
             reject(err);
           });
       });
