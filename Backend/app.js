@@ -379,6 +379,56 @@ app.get("/getUsers", function(req, res) {
     });
 });
 
+app.post("/updateUser", function(req, res) {
+  var idUser = req.body.id;
+  var firstName = req.body.firstName;
+  var lastName = req.body.lastName;
+  var pass = req.body.pass;
+  var phone = req.body.phone;
+  var address = req.body.address;
+  var city = req.body.city;
+  var organization = req.body.organization;
+
+  sequelize
+    .query(
+      "UPDATE users SET firstName = '" +
+        firstName +
+        "', lastName = '" +
+        lastName +
+        "', password = '" +
+        pass +
+        "', phone_number = '" +
+        phone +
+        "', address = '" +
+        address +
+        "', city = '" +
+        city +
+        "', organization = '" +
+        organization +
+        "' WHERE (id = " +
+        idUser +
+        ")",
+      { type: sequelize.QueryTypes.UPDATE }
+    )
+    .then(() => {
+      sequelize
+        .query("SELECT * FROM users WHERE (id = " + idUser + ")", {
+          type: sequelize.QueryTypes.SELECT
+        })
+        .then(user => {
+          res.status(200).send({ user: user[0] });
+        })
+        .catch(err => {
+          console.log(err);
+          return res.status(500).send("There was a problem on the server.");
+        });
+    })
+    .catch(err => {
+      console.log(err);
+      return res.status(500).send("There was a problem on the server.");
+    });
+});
+
 app.post("/getUser_Type", function(req, res) {
   var idType = req.body.data;
   sequelize

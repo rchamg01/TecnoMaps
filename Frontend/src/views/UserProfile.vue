@@ -61,7 +61,7 @@
         </v-layout>
         <v-layout row justify-space-between>
           <v-flex xs4>
-            <v-text-field v-model="form.phone_number" label="Phone number" hint="Optional field"></v-text-field>
+            <v-text-field v-model="form.phone" label="Phone number" hint="Optional field"></v-text-field>
           </v-flex>
           <v-flex xs4>
             <v-text-field v-model="form.address" label="Address" hint="Optional field"></v-text-field>
@@ -191,18 +191,29 @@ export default {
         (this.oldPass != "" &&
           this.oldPass == this.$store.getters.getUser.password) ||
         this.oldPass == ""
-      )
-        /*this.$store
-          .dispatch("updateUser", form)
+      ) {
+        var data = {
+          id: this.$store.getters.getUser.id,
+          pass:
+            this.newPass != ""
+              ? this.newPass
+              : this.$store.getters.getUser.password,
+          firstName: this.form.name,
+          lastName: this.form.lastName,
+          phone: this.form.phone,
+          address: this.form.address,
+          city: this.form.city,
+          organization: this.form.organization
+        };
+        this.$store
+          .dispatch("updateUser", data)
           .then(() => {
             this.snackbarSuccess = true;
           })
           .catch(err => {
             this.snackbarError = true;
-          });*/ console.log(
-          "call"
-        );
-      else this.snackbarPass = true;
+          });
+      } else this.snackbarPass = true;
     },
     deleteUser() {
       var data = {

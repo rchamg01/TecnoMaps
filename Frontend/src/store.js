@@ -285,7 +285,7 @@ export default new Vuex.Store({
           .then(resp => {
             const user = resp.data.user;
             commit("user_success");
-            commit("update_users", user);
+            commit("update_user", user);
             resolve(resp);
           })
           .catch(err => {
