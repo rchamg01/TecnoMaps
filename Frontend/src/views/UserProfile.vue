@@ -210,7 +210,7 @@ export default {
           .then(() => {
             this.snackbarSuccess = true;
           })
-          .catch(err => {
+          .catch(() => {
             this.snackbarError = true;
           });
       } else this.snackbarPass = true;
@@ -223,11 +223,11 @@ export default {
         .dispatch("logout", this.$store.getters.getUser)
         .then(() => {
           this.$router.push("/");
-          this.$store.dispatch("deleteUser", data).catch(err => {
+          this.$store.dispatch("deleteUser", data).catch(() => {
             this.snackbarError = true;
           });
         })
-        .catch(err => {
+        .catch(() => {
           this.snackbarError = true;
         });
     }
