@@ -42,7 +42,7 @@
         <td>{{ users.item.email }}</td>
         <td>{{ users.item.password }}</td>
         <td>
-          <v-checkbox v-model="users.item.active" readonly="readonly" color="success" hide-details></v-checkbox>
+          <v-checkbox v-model="users.item.active" :readonly="true" color="success" hide-details></v-checkbox>
         </td>
         <span width="30px">
           <v-btn icon depressed @click="showDeleteDialog(users.item)">
@@ -52,12 +52,12 @@
             v-if="$store.getters.getUser_type.type_name == 'admin'"
             icon
             depressed
-            @click="showProfileDialog(users.item)"
+            @click.stop="showProfileDialog(users.item)"
           >
             <v-icon color="black">visibility</v-icon>
           </v-btn>
         </span>
-        <v-dialog light v-model="deleteDialog" width="300">
+        <v-dialog light persistent v-model="deleteDialog" width="300">
           <v-card>
             <v-card-title class="headline blue-grey darken-1 white--text">Delete</v-card-title>
             <v-card-text>Are you sure you want to delete this user?</v-card-text>
@@ -68,7 +68,7 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-dialog v-model="profileDialog" width="500">
+        <v-dialog persistent v-model="profileDialog" width="500">
           <v-card>
             <v-card-title
               class="headline blue-grey darken-1 white--text"
@@ -103,11 +103,11 @@
                       <v-card-text>
                         <span class="font-weight-bold pa-0">User type:</span>
                         <v-select
-                          v-if="type!=null"
                           v-model="type"
                           :items="items"
                           item-value="id"
                           item-text="type_name"
+                          return-object
                         />
                       </v-card-text>
                     </v-card>
@@ -198,7 +198,6 @@ export default {
         }
       ],
       users: [],
-      readonly: true,
       search: ""
     };
   },
@@ -210,7 +209,22 @@ export default {
   },
   methods: {
     save() {
-      console.log("guay");
+      var data = {
+        idType: this.type.id,
+        id: this.currentUser.id
+      };
+      this.$store
+        .dispatch("editUser_type", {
+          data: data
+        })
+        .then(() => {
+          this.profileDialog = false;
+          this.requestUsers();
+          this.snackbarSuccess = true;
+        })
+        .catch(() => {
+          this.snackbarError = true;
+        });
     },
     showDeleteDialog(user) {
       this.deleteDialog = true;
@@ -222,8 +236,8 @@ export default {
           data: user.idType
         })
         .then(userType => {
-          this.currentUser = user;
           this.type = userType;
+          this.currentUser = user;
           this.profileDialog = true;
         });
     },

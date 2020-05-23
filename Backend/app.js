@@ -458,6 +458,22 @@ app.get("/getAllUser_Types", function(req, res) {
     });
 });
 
+app.post("/editUser_Type", function(req, res) {
+  var id = req.body.data.id;
+  var idType = req.body.data.idType;
+  sequelize
+    .query("UPDATE users SET idType = " + idType + " WHERE (id = " + id + ")", {
+      type: sequelize.QueryTypes.UPDATE
+    })
+    .then(type => {
+      res.status(200).send({ user_type: type });
+    })
+    .catch(err => {
+      console.log(err);
+      return res.status(500).send("There was a problem on the server.");
+    });
+});
+
 app.post("/deleteUser", function(req, res) {
   var id = req.body.id;
   sequelize

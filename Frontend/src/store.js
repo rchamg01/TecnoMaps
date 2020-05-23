@@ -274,6 +274,24 @@ export default new Vuex.Store({
           });
       });
     },
+    editUser_type({ commit }, data) {
+      return new Promise((resolve, reject) => {
+        commit("user_type_request");
+        axios({
+          url: "http://localhost:3000/editUser_type",
+          data: data,
+          method: "POST"
+        })
+          .then(resp => {
+            commit("user_type_success");
+            resolve(resp);
+          })
+          .catch(err => {
+            commit("user_type_error");
+            reject(err);
+          });
+      });
+    },
     getAllUser_types({ commit }) {
       return new Promise((resolve, reject) => {
         commit("user_type_request");
