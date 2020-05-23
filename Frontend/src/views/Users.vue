@@ -51,7 +51,7 @@
           <v-btn
             icon
             depressed
-            :disabled="users.item.privacity=='private'"
+            :disabled="users.item.privacity=='private' && $store.getters.getUser_type.id == 3"
             @click.stop="showProfileDialog(users.item)"
           >
             <v-icon color="black">visibility</v-icon>
@@ -103,7 +103,7 @@
                       <v-card-text>
                         <span class="font-weight-bold pa-0">User type:</span>
                         <v-select
-                          v-if="$store.getters.getUser_type == 1"
+                          v-if="$store.getters.getUser_type.id == 1"
                           v-model="type"
                           :items="items"
                           item-value="id"
