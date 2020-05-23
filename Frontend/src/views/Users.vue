@@ -49,9 +49,9 @@
             <v-icon color="black">delete_outline</v-icon>
           </v-btn>
           <v-btn
-            v-if="$store.getters.getUser_type.type_name == 'admin'"
             icon
             depressed
+            :disabled="users.item.privacity=='private'"
             @click.stop="showProfileDialog(users.item)"
           >
             <v-icon color="black">visibility</v-icon>
@@ -103,12 +103,17 @@
                       <v-card-text>
                         <span class="font-weight-bold pa-0">User type:</span>
                         <v-select
+                          v-if="$store.getters.getUser_type == 1"
                           v-model="type"
                           :items="items"
                           item-value="id"
                           item-text="type_name"
                           return-object
                         />
+
+                        <span
+                          v-else
+                        >&nbsp;{{ type ? type.type_name.charAt(0).toUpperCase() + type.type_name.slice(1) : '-' }}</span>
                       </v-card-text>
                     </v-card>
                   </v-flex>

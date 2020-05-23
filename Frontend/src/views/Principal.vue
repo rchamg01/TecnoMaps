@@ -129,7 +129,7 @@ export default {
           data: this.$store.getters.getUser.idType
         })
         .then(() => {
-          if (this.$store.getters.getUser_type.type_name == "admin") {
+          if (this.$store.getters.getUser_type.type_name != "standard") {
             this.items.push({
               link: "/users",
               title: "User Management",

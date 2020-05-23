@@ -41,6 +41,12 @@
               </v-card-title>
               <v-card-text>
                 <p>User type: {{ this.$store.getters.getUser_type.type_name.charAt(0).toUpperCase() + this.$store.getters.getUser_type.type_name.slice(1) }}</p>
+                <p>
+                  <v-switch
+                    v-model="form.privacity"
+                    :label="form.privacity==1 ? 'Public' : 'Private'"
+                  ></v-switch>
+                </p>
               </v-card-text>
             </v-card>
           </v-flex>
@@ -131,7 +137,14 @@
                   </v-card-actions>
                 </v-card>
               </v-dialog>
-              <v-btn text color="primary" depressed outline @click="save()">Save</v-btn>
+              <v-btn
+                text
+                color="primary"
+                depressed
+                :disabled="!formIsValid"
+                outline
+                @click="save()"
+              >Save</v-btn>
             </v-layout>
           </v-container>
         </v-card-actions>
@@ -144,8 +157,12 @@
 export default {
   data() {
     const form = {
-      name: this.$store.getters.getUser.firstname,
-      lastName: this.$store.getters.getUser.lastname,
+      name: this.$store.getters.getUser.firstname
+        ? this.$store.getters.getUser.firstname
+        : "",
+      lastName: this.$store.getters.getUser.lastname
+        ? this.$store.getters.getUser.lastname
+        : "",
       email: this.$store.getters.getUser.email,
       phone: this.$store.getters.getUser.phone_number
         ? this.$store.getters.getUser.phone_number
@@ -158,7 +175,9 @@ export default {
         : "",
       organization: this.$store.getters.getUser.organization
         ? this.$store.getters.getUser.organization
-        : ""
+        : "",
+      privacity:
+        this.$store.getters.getUser.privacity == "private" ? false : true
     };
     return {
       rules: {
@@ -182,6 +201,11 @@ export default {
       snackbarPass: false
     };
   },
+  computed: {
+    formIsValid() {
+      return this.form.name && this.form.lastName;
+    }
+  },
   methods: {
     showDialog() {
       this.dialog = true;
@@ -203,7 +227,8 @@ export default {
           phone: this.form.phone,
           address: this.form.address,
           city: this.form.city,
-          organization: this.form.organization
+          organization: this.form.organization,
+          privacity: this.form.privacity == true ? "public" : "private"
         };
         this.$store
           .dispatch("updateUser", data)

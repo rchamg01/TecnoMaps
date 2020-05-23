@@ -388,6 +388,7 @@ app.post("/updateUser", function(req, res) {
   var address = req.body.address;
   var city = req.body.city;
   var organization = req.body.organization;
+  var privacity = req.body.privacity;
 
   sequelize
     .query(
@@ -405,6 +406,8 @@ app.post("/updateUser", function(req, res) {
         city +
         "', organization = '" +
         organization +
+        "', privacity = '" +
+        privacity +
         "' WHERE (id = " +
         idUser +
         ")",
