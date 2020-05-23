@@ -274,6 +274,24 @@ export default new Vuex.Store({
           });
       });
     },
+    getAllUser_types({ commit }) {
+      return new Promise((resolve, reject) => {
+        commit("user_type_request");
+        axios({
+          url: "http://localhost:3000/getAllUser_Types",
+          method: "GET"
+        })
+          .then(resp => {
+            const user_types = resp.data.user_types;
+            commit("user_type_success");
+            resolve(user_types);
+          })
+          .catch(err => {
+            commit("user_type_error");
+            reject(err);
+          });
+      });
+    },
     getOtherUser_type({ commit }, type) {
       return new Promise((resolve, reject) => {
         commit("user_type_request");

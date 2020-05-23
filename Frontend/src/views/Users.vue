@@ -102,7 +102,13 @@
                       </v-card-title>
                       <v-card-text>
                         <span class="font-weight-bold pa-0">User type:</span>
-                        {{ currentUser && currentUser.idType ? currentUser.type : '-' }}
+                        <v-select
+                          v-if="type!=null"
+                          v-model="type"
+                          :items="items"
+                          item-value="id"
+                          item-text="type_name"
+                        />
                       </v-card-text>
                     </v-card>
                   </v-flex>
@@ -144,7 +150,7 @@
             <v-card-actions>
               <v-btn color="grey" outline depressed @click="profileDialog = false">Cancel</v-btn>
               <v-spacer></v-spacer>
-              <v-btn color="blue" outline depressed>SAVE</v-btn>
+              <v-btn color="blue" outline depressed @click="save()">SAVE</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -162,6 +168,8 @@ export default {
       snackbarError: false,
       snackbarSuccess: false,
       snackbarSuccessDeleted: false,
+      type: null,
+      items: [],
       dialogId: "",
       headers: [
         {
@@ -194,11 +202,16 @@ export default {
       search: ""
     };
   },
-  computed: {},
   mounted() {
     this.requestUsers();
+    this.$store.dispatch("getAllUser_types").then(userTypes => {
+      this.items = userTypes;
+    });
   },
   methods: {
+    save() {
+      console.log("guay");
+    },
     showDeleteDialog(user) {
       this.deleteDialog = true;
       this.dialogId = user.id;
@@ -210,9 +223,7 @@ export default {
         })
         .then(userType => {
           this.currentUser = user;
-          this.currentUser["type"] =
-            userType.type_name.charAt(0).toUpperCase() +
-            userType.type_name.slice(1);
+          this.type = userType;
           this.profileDialog = true;
         });
     },

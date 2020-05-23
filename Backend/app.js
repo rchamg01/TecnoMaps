@@ -444,6 +444,20 @@ app.post("/getUser_Type", function(req, res) {
     });
 });
 
+app.get("/getAllUser_Types", function(req, res) {
+  sequelize
+    .query("SELECT * FROM user_types", {
+      type: sequelize.QueryTypes.SELECT
+    })
+    .then(types => {
+      res.status(200).send({ user_types: types });
+    })
+    .catch(err => {
+      console.log(err);
+      return res.status(500).send("There was a problem on the server.");
+    });
+});
+
 app.post("/deleteUser", function(req, res) {
   var id = req.body.id;
   sequelize
