@@ -39,8 +39,8 @@
       <template v-slot:items="users">
         <td>{{ users.item.id }}</td>
         <td>{{ users.item.username }}</td>
+        <td>{{ users.item.firstname }} {{ users.item.lastname }}</td>
         <td>{{ users.item.email }}</td>
-        <td>{{ users.item.password }}</td>
         <td>
           <v-checkbox v-model="users.item.active" :readonly="true" color="success" hide-details></v-checkbox>
         </td>
@@ -103,6 +103,7 @@
                       <v-card-text>
                         <span class="font-weight-bold pa-0">User type:</span>
                         <v-select
+                          dense
                           v-if="$store.getters.getUser_type.id == 1"
                           v-model="type"
                           :items="items"
@@ -186,12 +187,12 @@ export default {
           value: "username"
         },
         {
-          text: "E-mail",
-          value: "email"
+          text: "Full name",
+          value: "fullname"
         },
         {
-          text: "Password",
-          value: "password"
+          text: "E-mail",
+          value: "email"
         },
         {
           text: "Active",

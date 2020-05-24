@@ -40,7 +40,10 @@
                 </div>
               </v-card-title>
               <v-card-text>
-                <p>User type: {{ this.$store.getters.getUser_type.type_name.charAt(0).toUpperCase() + this.$store.getters.getUser_type.type_name.slice(1) }}</p>
+                <p>
+                  <b>User type:</b>
+                  {{ this.$store.getters.getUser_type.type_name.charAt(0).toUpperCase() + this.$store.getters.getUser_type.type_name.slice(1) }}
+                </p>
                 <p>
                   <v-switch
                     v-model="form.privacity"
@@ -56,29 +59,65 @@
 
         <v-layout row justify-space-between>
           <v-flex xs4>
-            <v-text-field v-model="form.name" :rules="rules.name" label="First Name"></v-text-field>
+            <v-text-field
+              prepend-icon="person"
+              v-model="form.name"
+              :rules="rules.name"
+              label="First Name"
+            ></v-text-field>
           </v-flex>
           <v-flex xs4>
-            <v-text-field v-model="form.lastName" :rules="rules.lastName" label="Last Name"></v-text-field>
+            <v-text-field
+              prepend-icon="person"
+              v-model="form.lastName"
+              :rules="rules.lastName"
+              label="Last Name"
+            ></v-text-field>
           </v-flex>
           <v-flex xs4>
-            <v-text-field v-model="form.email" :rules="rules.email" label="Email Address" disabled></v-text-field>
+            <v-text-field
+              prepend-icon="mail"
+              v-model="form.email"
+              :rules="rules.email"
+              label="Email Address"
+              disabled
+            ></v-text-field>
           </v-flex>
         </v-layout>
         <v-layout row justify-space-between>
           <v-flex xs4>
-            <v-text-field v-model="form.phone" label="Phone number" hint="Optional field"></v-text-field>
+            <v-text-field
+              prepend-icon="contact_phone"
+              v-model="form.phone"
+              label="Phone number"
+              hint="Optional field"
+            ></v-text-field>
           </v-flex>
           <v-flex xs4>
-            <v-text-field v-model="form.address" label="Address" hint="Optional field"></v-text-field>
+            <v-text-field
+              prepend-icon="home_work"
+              v-model="form.address"
+              label="Address"
+              hint="Optional field"
+            ></v-text-field>
           </v-flex>
           <v-flex xs4>
-            <v-text-field v-model="form.city" label="City" hint="Optional field"></v-text-field>
+            <v-text-field
+              prepend-icon="location_city"
+              v-model="form.city"
+              label="City"
+              hint="Optional field"
+            ></v-text-field>
           </v-flex>
         </v-layout>
         <v-layout row>
           <v-flex xs4>
-            <v-text-field v-model="form.organization" label="Organization" hint="Optional field"></v-text-field>
+            <v-text-field
+              prepend-icon="business"
+              v-model="form.organization"
+              label="Organization"
+              hint="Optional field"
+            ></v-text-field>
           </v-flex>
         </v-layout>
         <v-divider></v-divider>

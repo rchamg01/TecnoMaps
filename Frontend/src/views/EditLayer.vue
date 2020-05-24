@@ -108,23 +108,7 @@
                 </v-flex>
 
                 <v-flex xs4>
-                  <v-text-field
-                    label="Layer visibility minimum scale"
-                    prepend-inner-icon="zoom_out"
-                    placeholder="1:"
-                    outlined
-                  ></v-text-field>
-                </v-flex>
-              </v-layout>
-              <v-layout row justify-space-between>
-                <v-flex xs4>
                   <v-checkbox label="Visible" color="green" v-model="layer.visible"></v-checkbox>
-                </v-flex>
-                <v-flex xs4>
-                  <v-checkbox disabled label="Proxy" color="green"></v-checkbox>
-                </v-flex>
-                <v-flex xs4>
-                  <v-checkbox disabled label="Secured" color="green"></v-checkbox>
                 </v-flex>
               </v-layout>
             </v-container>
