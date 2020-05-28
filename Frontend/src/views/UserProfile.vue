@@ -9,40 +9,28 @@
         <v-card-text>
           <v-layout row>
             <v-flex shrink pa-1>
-              <image-input v-model="avatar">
-                <div slot="activator">
-                  <v-avatar
-                    size="150px"
-                    v-ripple
-                    v-if="!this.$store.getters.getUser.profile_photo && !avatar"
-                    class="grey lighten-3 mb-3"
-                  >
-                    <span>Click to add avatar</span>
-                  </v-avatar>
-                  <v-avatar size="150px" v-ripple v-else-if="avatar" class="mb-3">
-                    <img :src="avatar.imageURL" alt="avatar" />
-                  </v-avatar>
-                  <v-avatar
-                    size="150px"
-                    v-ripple
-                    v-else-if="this.$store.getters.getUser.profile_photo"
-                    class="mb-3"
-                  >
-                    <img :src="this.$store.getters.getUser.profile_photo" alt="avatar" />
-                  </v-avatar>
-                </div>
-              </image-input>
-              <v-slide-x-transition>
-                <div v-if="avatar && saved == false">
-                  <v-btn
-                    outline
-                    depressed
-                    color="grey"
-                    @click="uploadImage"
-                    :loading="saving"
-                  >Save Avatar</v-btn>
-                </div>
-              </v-slide-x-transition>
+              <v-avatar
+                size="150px"
+                v-ripple
+                v-if="!this.$store.getters.getUser.profile_photo && !avatar"
+                class="grey lighten-3 mb-3"
+              >
+                <img
+                  src="https://i.pinimg.com/originals/47/1a/1a/471a1ad342659289433e05a611d206f8.png"
+                  alt="avatar"
+                />
+              </v-avatar>
+              <v-avatar size="150px" v-ripple v-else-if="avatar" class="mb-3">
+                <img :src="avatar" alt="avatar" />
+              </v-avatar>
+              <v-avatar
+                size="150px"
+                v-ripple
+                v-else-if="this.$store.getters.getUser.profile_photo"
+                class="mb-3"
+              >
+                <img :src="this.$store.getters.getUser.profile_photo" alt="avatar" />
+              </v-avatar>
             </v-flex>
             <v-flex grow pa-1>
               <v-card flat>
@@ -62,6 +50,20 @@
               </v-card>
             </v-flex>
           </v-layout>
+          <v-btn outline depressed color="grey" @click="showDialogp()">Change Avatar</v-btn>
+          <v-dialog v-model="dialogp" width="300">
+            <v-card>
+              <v-card-title class="headline blue-grey darken-1 white--text">Avatar image</v-card-title>
+              <v-card-text>
+                <v-text-field label="URL image" v-model="avatar" clearable></v-text-field>
+              </v-card-text>
+              <v-card-actions>
+                <v-btn color="grey" outline depressed @click="dialogp = false">Cancel</v-btn>
+                <v-spacer></v-spacer>
+                <v-btn color="red" outline depressed @click="uploadImage()">SAVE AVATAR</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
           <v-layout row justify-space-between>
             <v-flex xs3>
               <v-text-field label="First Name"></v-text-field>
@@ -100,27 +102,23 @@
 </template>
 
 <script>
-import ImageInput from "@/components/ImageInput.vue";
-
 export default {
   data() {
     return {
       dialog: false,
+      dialogp: false,
       snackbarError: false,
       avatar: null,
       saving: false,
       saved: false
     };
   },
-  components: {
-    ImageInput: ImageInput
-  },
+
   watch: {
     avatar: {
       handler: function() {
         this.saved = false;
-      },
-      deep: true
+      }
     }
   },
   methods: {
@@ -128,10 +126,9 @@ export default {
       this.saving = true;
       var data = {
         id: this.$store.getters.getUser.id,
-        url: this.avatar.imageURL
+        url: this.avatar
       };
-      this.savedAvatar();
-      /*this.$store
+      this.$store
         .dispatch("saveAvatar", data)
         .then(() => {
           this.$store
@@ -145,7 +142,7 @@ export default {
         })
         .catch(err => {
           this.snackbarError = true;
-        });*/
+        });
     },
     savedAvatar() {
       this.saving = false;
@@ -153,6 +150,9 @@ export default {
     },
     showDialog() {
       this.dialog = true;
+    },
+    showDialogp() {
+      this.dialogp = true;
     },
     deleteUser() {
       var data = {
