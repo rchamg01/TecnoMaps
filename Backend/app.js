@@ -329,15 +329,13 @@ app.get("/getUsers", function(req, res) {
     });
 });
 
-app.get("/getUser", function(req, res) {
-  console.log(req.body);
+app.post("/getUser", function(req, res) {
   var id = req.body.id;
   sequelize
     .query("SELECT * FROM users WHERE id = '" + id + "'", {
       type: sequelize.QueryTypes.SELECT
     })
     .then(user => {
-      console.log(user);
       res.status(200).send({ user: user });
     })
     .catch(err => {

@@ -113,17 +113,10 @@ export default {
       saved: false
     };
   },
-
-  watch: {
-    avatar: {
-      handler: function() {
-        this.saved = false;
-      }
-    }
-  },
   methods: {
     uploadImage() {
       this.saving = true;
+      var id = this.$store.getters.getUser.id;
       var data = {
         id: this.$store.getters.getUser.id,
         url: this.avatar
@@ -132,15 +125,15 @@ export default {
         .dispatch("saveAvatar", data)
         .then(() => {
           this.$store
-            .dispatch("getUser", this.$store.getters.getUser.id)
+            .dispatch("getUser", id)
             .then(() => {
               this.savedAvatar();
             })
-            .catch(err => {
+            .catch(() => {
               this.snackbarError = true;
             });
         })
-        .catch(err => {
+        .catch(() => {
           this.snackbarError = true;
         });
     },
@@ -162,11 +155,11 @@ export default {
         .dispatch("logout", this.$store.getters.getUser)
         .then(() => {
           this.$router.push("/");
-          this.$store.dispatch("deleteUser", data).catch(err => {
+          this.$store.dispatch("deleteUser", data).catch(() => {
             this.snackbarError = true;
           });
         })
-        .catch(err => {
+        .catch(() => {
           this.snackbarError = true;
         });
     }

@@ -153,7 +153,7 @@ export default new Vuex.Store({
         axios({
           url: "http://localhost:3000/getUser",
           data: id,
-          method: "GET"
+          method: "POST"
         })
           .then(resp => {
             const user = resp.data.user;
